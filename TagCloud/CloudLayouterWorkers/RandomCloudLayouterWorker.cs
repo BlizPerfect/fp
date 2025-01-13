@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
+using TagCloud.Parsers;
 
 namespace TagCloud.CloudLayouterWorkers
 {
@@ -19,24 +21,23 @@ namespace TagCloud.CloudLayouterWorkers
             int minRectangleHeight,
             int maxRectangleHeight)
         {
-            if (minRectangleWidth <= 0 || maxRectangleWidth <= 0
-                || minRectangleHeight <= 0 || maxRectangleHeight <= 0)
+            if (AreMinAndMaxSizesAppropriate(minRectangleWidth, maxRectangleWidth).GetValueOrThrow()
+                && AreMinAndMaxSizesAppropriate(minRectangleHeight, maxRectangleHeight).GetValueOrThrow())
             {
-                throw new ArgumentException(
-                    "Ширина или высота прямоугольника должна быть положительной");
+                MinRectangleWidth = SizeParser.ParseSizeDimension(minRectangleWidth).GetValueOrThrow();
+                MaxRectangleWidth = SizeParser.ParseSizeDimension(maxRectangleWidth).GetValueOrThrow();
+                MinRectangleHeight = SizeParser.ParseSizeDimension(minRectangleHeight).GetValueOrThrow();
+                MaxRectangleHeight = SizeParser.ParseSizeDimension(maxRectangleHeight).GetValueOrThrow();
             }
+        }
 
-            if (minRectangleWidth > maxRectangleWidth
-                || minRectangleHeight > maxRectangleHeight)
+        private Result<bool> AreMinAndMaxSizesAppropriate(int min, int max)
+        {
+            if (min > max)
             {
-                throw new ArgumentException(
-                    "Минимальное значение ширины или высоты не может быть больше максимального");
+                return Result.Fail<bool>("Минимальное значение не может быть больше максимального");
             }
-
-            MinRectangleWidth = minRectangleWidth;
-            MaxRectangleWidth = maxRectangleWidth;
-            MinRectangleHeight = minRectangleHeight;
-            MaxRectangleHeight = maxRectangleHeight;
+            return true.AsResult();
         }
 
         public IEnumerable<(string word, Size size)> GetNextRectangleProperties()

@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
+using System.IO;
 
 namespace TagCloud.ImageSavers
 {
@@ -7,19 +9,20 @@ namespace TagCloud.ImageSavers
     // Поддерживать разные форматы изображений.
     internal class ImageSaver : IImageSaver
     {
-        public void SaveFile(Bitmap image, string fileName, string format = "png")
+        public Result<None> SaveFile(Bitmap image, string fileName, string format = "png")
         {
             if (image is null)
             {
-                throw new ArgumentNullException("Передаваемое изображение не должно быть null");
+                return Result.Fail<None>("Передаваемое изображение не должно быть null");
             }
 
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                throw new ArgumentException("Некорректное имя файла для создания");
+                return Result.Fail<None>("Некорректное имя файла для создания");
             }
 
             image.Save($"{fileName}.{format}");
+            return Result.Ok();
         }
     }
 }

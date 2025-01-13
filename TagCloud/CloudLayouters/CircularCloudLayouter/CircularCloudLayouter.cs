@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
 
 namespace TagCloud.CloudLayouters.CircularCloudLayouter
 {
@@ -18,12 +19,11 @@ namespace TagCloud.CloudLayouters.CircularCloudLayouter
         private readonly Random random = new Random();
         private readonly List<Rectangle> rectangles = new List<Rectangle>();
 
-        public Rectangle PutNextRectangle(Size rectangleSize)
+        public Result<Rectangle> PutNextRectangle(Size rectangleSize)
         {
             if (rectangleSize.Width <= 0 || rectangleSize.Height <= 0)
             {
-                throw new ArgumentException(
-                    "Размеры прямоугольника не могут быть меньше либо равны нуля.");
+                return Result.Fail<Rectangle>("Размеры прямоугольника не могут быть меньше либо равны нуля");
             }
 
             var result = new Rectangle();
@@ -49,7 +49,7 @@ namespace TagCloud.CloudLayouters.CircularCloudLayouter
                 arrangementСircle.Radius += 1.0f;
             }
 
-            return result;
+            return result.AsResult();
         }
 
         private bool IsIntersectionWithAlreadyPlaced(Rectangle rectangle)

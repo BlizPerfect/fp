@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
 
 namespace TagCloud.CloudLayouterPainters
 {
@@ -12,13 +13,16 @@ namespace TagCloud.CloudLayouterPainters
         private readonly Color textColor = textColor ?? Color.Black;
         private readonly string fontName = fontName ?? "Arial";
 
-        public Bitmap Draw(IList<Tag> tags)
+        public Result<Bitmap> Draw(IList<Tag> tags)
         {
-            ArgumentNullException.ThrowIfNull(tags);
+            if (tags is null)
+            {
+                return Result.Fail<Bitmap>("Tags передан как null");
+            }
 
             if (tags.Count == 0)
             {
-                throw new ArgumentException("Список тегов пуст");
+                return Result.Fail<Bitmap>("Список тегов пуст");
             }
 
             var result = new Bitmap(imageSize.Width, imageSize.Height);
@@ -37,7 +41,7 @@ namespace TagCloud.CloudLayouterPainters
                 DrawText(graphics, rectOnCanvas, tag.Text);
             }
 
-            return result;
+            return result.AsResult();
         }
 
         private Point GetPositionOnCanvas(Rectangle rectangle)

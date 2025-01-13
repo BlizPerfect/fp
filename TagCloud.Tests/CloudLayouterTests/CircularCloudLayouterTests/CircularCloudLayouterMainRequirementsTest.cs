@@ -49,7 +49,7 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
                 tags.Add(
                     new Tag(
                         rectangleProperty.word,
-                        circularCloudLayouter.PutNextRectangle(rectangleProperty.size)));
+                        circularCloudLayouter.PutNextRectangle(rectangleProperty.size).GetValueOrThrow()));
             }
             rectangles = tags.Select(x => x.Rectangle).ToArray();
         }
@@ -109,7 +109,7 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
 
             var name = $"{TestContext.CurrentContext.Test.Name}.png";
             var path = Path.Combine(failedTestsDirectory, name);
-            imageSaver.SaveFile(cloudLayouterPainter.Draw(tags), path);
+            imageSaver.SaveFile(cloudLayouterPainter.Draw(tags).GetValueOrThrow(), path);
             Console.WriteLine($"Tag cloud visualization saved to file {path}");
         }
 

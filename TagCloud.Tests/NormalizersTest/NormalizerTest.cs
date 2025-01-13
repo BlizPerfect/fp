@@ -1,7 +1,8 @@
-﻿using FluentAssertions;
+﻿using FileSenderRailway;
+using FluentAssertions;
 using TagCloud.Normalizers;
 
-namespace TagCloud.Tests.WordCountersTests
+namespace TagCloud.Tests.NormalaizersTest
 {
     [TestFixture]
     internal class NormalizerTest
@@ -29,21 +30,25 @@ namespace TagCloud.Tests.WordCountersTests
         public void Normalize_ThrowsArgumentException_WithMinCoefficientLessThanZero(
             double minCoefficient)
         {
-            Assert.Throws<ArgumentException>(()
-                => normalizer.Normalize(values, minCoefficient, defaultDecimalPlaces));
+            var expected = Result.Fail<Dictionary<string, double>>("Минимальный коэффициент нормализации не может быть меньше 0");
+            var actual = normalizer.Normalize(values, minCoefficient, defaultDecimalPlaces);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase(0.25, 4)]
         [TestCase(0.25, 2)]
         public void Normalize_CalculatesСorrectly(double minCoefficient, int decimalPlaces)
         {
+            var dict = new Dictionary<string, double>();
             foreach (var pair in expectedResult)
             {
-                expectedResult[pair.Key] = Math.Round(pair.Value, decimalPlaces);
+                dict[pair.Key] = Math.Round(pair.Value, decimalPlaces);
             }
+            var expected = dict.AsResult();
             var actual = normalizer.Normalize(values, minCoefficient, decimalPlaces);
-
-            actual.Should().BeEquivalentTo(expectedResult);
+            actual.IsSuccess.Should().Be(expected.IsSuccess);
+            actual.Error.Should().Be(expected.Error);
+            actual.Value.Should().BeEquivalentTo(expected.Value);
         }
     }
 }

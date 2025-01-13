@@ -1,10 +1,11 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
 
 namespace TagCloud.CloudLayouterPainters
 {
     // Интерфейс отрисовки прямоугольников
     internal interface ICloudLayouterPainter
     {
-        public Bitmap Draw(IList<Tag> tags);
+        public Result<Bitmap> Draw(IList<Tag> tags);
     }
 }

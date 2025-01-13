@@ -1,4 +1,6 @@
-﻿namespace TagCloud.Normalizers
+﻿using FileSenderRailway;
+
+namespace TagCloud.Normalizers
 {
     // Слово, которое встречается чаще всего, будет иметь вес 1.0.
     // Это означает, что оно в дальнейшем будет иметь прямоугольник
@@ -7,14 +9,14 @@
     // minCoefficient *  максимальный размеро прямоугольника.
     internal class Normalizer : INormalizer
     {
-        public Dictionary<string, double> Normalize(
+        public Result<Dictionary<string, double>> Normalize(
             Dictionary<string, uint> values,
             double minCoefficient = 0.25,
             int decimalPlaces = 4)
         {
             if (minCoefficient < 0)
             {
-                throw new ArgumentException("Минимальный коэффициент не может быть меньше 0");
+                return Result.Fail<Dictionary<string, double>>("Минимальный коэффициент нормализации не может быть меньше 0");
             }
 
             var result = new Dictionary<string, double>();
@@ -35,7 +37,7 @@
                     decimalPlaces);
             }
 
-            return result;
+            return result.AsResult();
         }
 
         private double CalculateNormalizedValue(

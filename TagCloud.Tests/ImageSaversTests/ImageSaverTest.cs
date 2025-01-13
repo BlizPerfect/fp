@@ -1,5 +1,8 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using FluentAssertions;
+using System.Drawing;
 using TagCloud.ImageSavers;
+using TagCloud.WordReaders;
 
 namespace TagCloud.Tests.ImageSaversTests
 {
@@ -25,7 +28,9 @@ namespace TagCloud.Tests.ImageSaversTests
         public void SaveFile_ArgumentNullException_WithNullBitmap(string filename)
         {
             var path = Path.Combine(directoryPath, filename);
-            Assert.Throws<ArgumentNullException>(() => imageSaver.SaveFile(null!, path));
+            var expected = Result.Fail<None>("Передаваемое изображение не должно быть null");
+            var actual = imageSaver.SaveFile(null!, path);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase(null)]
@@ -34,7 +39,9 @@ namespace TagCloud.Tests.ImageSaversTests
         public void SaveFile_ThrowsArgumentException_WithInvalidFilename(string? filename)
         {
             var dummyImage = new Bitmap(1, 1);
-            Assert.Throws<ArgumentException>(() => imageSaver.SaveFile(dummyImage, filename!));
+            var expected = Result.Fail<None>("Некорректное имя файла для создания");
+            var actual = imageSaver.SaveFile(dummyImage, filename!);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("Test", "png", ExpectedResult = true)]
@@ -44,7 +51,7 @@ namespace TagCloud.Tests.ImageSaversTests
             var dummyImage = new Bitmap(1, 1);
             var path = Path.Combine(directoryPath, filename);
 
-            File.Delete(path);
+            File.Delete($"{path}.{format}");
             imageSaver.SaveFile(dummyImage, path, format);
             return File.Exists($"{path}.{format}");
         }

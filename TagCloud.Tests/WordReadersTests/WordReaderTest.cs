@@ -1,4 +1,6 @@
-﻿using TagCloud.WordReaders;
+﻿using FileSenderRailway;
+using FluentAssertions;
+using TagCloud.WordReaders;
 
 namespace TagCloud.Tests.WordReadersTests
 {
@@ -58,14 +60,18 @@ namespace TagCloud.Tests.WordReadersTests
         public void WordReader_ThrowsFileNotFoundException_WithInvalidFilename(string filename)
         {
             var path = Path.Combine(directoryPath, filename);
-            Assert.Throws<FileNotFoundException>(() => wordReader.ReadByLines(path).ToArray());
+            var expected = Result.Fail<string>($"Файл {path} не существует");
+            var actual = wordReader.ReadByLines(path).ToArray();
+            actual.Should().Contain(expected).And.HaveCount(1);
         }
 
         [Test]
         public void WordReader_ThrowsException_WithTwoWordsInOneLine()
         {
             var path = Path.Combine(directoryPath, fileWithIncorrectValuesPath);
-            Assert.Throws<Exception>(() => wordReader.ReadByLines(path).ToArray());
+            var expected = Result.Fail<string>($"Файл {path} содержит строку с двумя и более словами");
+            var actual = wordReader.ReadByLines(path).ToArray();
+            actual.Should().Contain(expected);
         }
 
         [OneTimeTearDown]

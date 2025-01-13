@@ -23,8 +23,10 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
             int width,
             int height)
         {
-            Assert.Throws<ArgumentException>(
+            var message = $"Переданное числовое значение должно быть больше 0: {(width <= 0 ? width : height)}";
+            var exception = Assert.Throws<InvalidOperationException>(
                 () => new NormalizedFrequencyBasedCloudLayouterWorker(width, height, normalizedValues));
+            exception.Message.Should().Contain(message);
         }
 
         [TestCase(100, 25, false)]

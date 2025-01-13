@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
+using TagCloud.Parsers;
 
 namespace TagCloud.CloudLayouterWorkers
 {
@@ -16,14 +18,8 @@ namespace TagCloud.CloudLayouterWorkers
             Dictionary<string, double> normalizedValues,
             bool isSorted = true)
         {
-            if (maxRectangleWidth <= 0 || maxRectangleHeight <= 0)
-            {
-                throw new ArgumentException(
-                    "Ширина или высота прямоугольника должна быть положительной");
-            }
-
-            MaxRectangleWidth = maxRectangleWidth;
-            MaxRectangleHeight = maxRectangleHeight;
+            MaxRectangleWidth = SizeParser.ParseSizeDimension(maxRectangleWidth).GetValueOrThrow();
+            MaxRectangleHeight = SizeParser.ParseSizeDimension(maxRectangleHeight).GetValueOrThrow();
             values = normalizedValues;
             if (isSorted)
             {

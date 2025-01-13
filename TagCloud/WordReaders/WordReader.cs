@@ -1,21 +1,25 @@
-﻿namespace TagCloud.WordReaders
+﻿using FileSenderRailway;
+
+namespace TagCloud.WordReaders
 {
     internal class WordReader : IWordReader
     {
-        public IEnumerable<string> ReadByLines(string path)
+        public IEnumerable<Result<string>> ReadByLines(string path)
         {
             if (!File.Exists(path))
             {
-                throw new FileNotFoundException($"Файл {path} не существует");
+                yield return Result.Fail<string>($"Файл {path} не существует");
+                yield break;
             }
 
             foreach (var line in File.ReadAllLines(path))
             {
                 if (line.Contains(' '))
                 {
-                    throw new Exception($"Файл {path} содержит строку с двумя и более словами");
+                    yield return Result.Fail<string>($"Файл {path} содержит строку с двумя и более словами");
+                    yield break;
                 }
-                yield return line;
+                yield return line.AsResult();
             }
         }
     }

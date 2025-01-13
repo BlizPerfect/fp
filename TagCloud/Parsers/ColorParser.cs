@@ -1,17 +1,18 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
 
 namespace TagCloud.Parsers
 {
     internal static class ColorParser
     {
-        public static Color ParseColor(string color)
+        public static Result<Color> ParseColor(string color)
         {
             var result = Color.FromName(color);
             if (!result.IsKnownColor)
             {
-                throw new ArgumentException($"Неизвестный цвет {color}");
+                return Result.Fail<Color>($"Неизвестный цвет {color}");
             }
-            return result;
+            return result.AsResult();
         }
     }
 }

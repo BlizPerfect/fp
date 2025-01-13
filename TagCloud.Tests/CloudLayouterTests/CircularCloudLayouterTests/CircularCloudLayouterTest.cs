@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using FluentAssertions;
+using System.Drawing;
 using TagCloud.CloudLayouters.CircularCloudLayouter;
 
 namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
@@ -15,8 +17,9 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
             int height)
         {
             var size = new Size(width, height);
-            Assert.Throws<ArgumentException>(
-                () => new CircularCloudLayouter().PutNextRectangle(size));
+            var expected = Result.Fail<Rectangle>("Размеры прямоугольника не могут быть меньше либо равны нуля");
+            var actual = new CircularCloudLayouter().PutNextRectangle(size);
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }
