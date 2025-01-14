@@ -2,7 +2,6 @@
 using FluentAssertions;
 using System.Drawing;
 using TagCloud.CloudLayouterPainters;
-using TagCloud.WordReaders;
 
 namespace TagCloud.Tests.CloudLayouterPaintersTest
 {
@@ -17,7 +16,7 @@ namespace TagCloud.Tests.CloudLayouterPaintersTest
         }
 
         [Test]
-        public void Draw_ThrowsArgumentException_WithEmptyTags()
+        public void Draw_ThrowsException_WithEmptyTags()
         {
             var expected = Result.Fail<Bitmap>("Список тегов пуст");
             var actual = painter.Draw(new List<Tag>());
@@ -25,11 +24,27 @@ namespace TagCloud.Tests.CloudLayouterPaintersTest
         }
 
         [Test]
-        public void Draw_ThrowsArgumentNullException_WithTagsAsNull()
+        public void Draw_ThrowsException_WithTagsAsNull()
         {
 
             var expected = Result.Fail<Bitmap>("Tags передан как null");
             var actual = painter.Draw(null!);
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void Draw_ThrowsException_WithTooSmallTiFitImage()
+        {
+            var expected = Result
+                .Fail<Bitmap>("Все прямоугольники не помещаются на изображение. Измените его размеры");
+            var actual = painter
+                .Draw(
+                    new Tag[]
+                    {
+                        new Tag(
+                            "Test",
+                            new Rectangle(new Point(0, 0), new Size(100, 100)))
+                    });
             actual.Should().BeEquivalentTo(expected);
         }
     }
