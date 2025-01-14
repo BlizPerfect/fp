@@ -5,15 +5,14 @@ namespace TagCloud.Parsers
 {
     internal static class FontParser
     {
-        public static Result<string> ParseFont(string font)
+        public static Result<FontFamily> ParseFont(string font)
         {
             if (!FontFamily.Families.Any(
                 x => x.Name.Equals(font, StringComparison.OrdinalIgnoreCase)))
             {
-                return Result.Fail<string>($"Неизвестный шрифт {font}");
+                return Result.Fail<FontFamily>($"Неизвестный шрифт {font}");
             }
-            return font.AsResult();
+            return new FontFamily(font).AsResult();
         }
-
     }
 }
