@@ -14,4 +14,8 @@
     <PackageReference Include="System.Drawing.Common" Version="9.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FileSenderRailway\FileSenderRailway.csproj" />
+  </ItemGroup>
+
 </Project>

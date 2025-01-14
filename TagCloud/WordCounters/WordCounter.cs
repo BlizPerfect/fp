@@ -7,12 +7,8 @@
 
         public void AddWord(string word)
         {
-            if (!counts.ContainsKey(word))
-            {
-                counts[word] = 1;
-                return;
-            }
-            counts[word] += 1;
+            counts.TryGetValue(word, out uint value);
+            counts[word] = value + 1;
         }
     }
 }

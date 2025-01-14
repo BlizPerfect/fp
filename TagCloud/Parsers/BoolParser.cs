@@ -6,9 +6,9 @@ namespace TagCloud.Parsers
     {
         public static Result<bool> ParseIsSorted(string value)
         {
-            if (value == false.ToString() || value == true.ToString())
+            if (value == bool.FalseString || value == bool.TrueString)
             {
-                return (value == true.ToString()).AsResult();
+                return Convert.ToBoolean(value).AsResult();
             }
             return Result.Fail<bool>($"Неизвестный параметр сортировки {value}");
         }
