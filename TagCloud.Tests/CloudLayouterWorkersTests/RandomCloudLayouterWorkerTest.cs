@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using FileSenderRailway;
+using FluentAssertions;
+using System.Drawing;
 using TagCloud.CloudLayouterWorkers;
 
 namespace TagCloud.Tests.CloudLayouterWorkersTests
@@ -10,14 +12,17 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
         [TestCase(-1, 100)]
         [TestCase(100, 0)]
         [TestCase(100, -1)]
-        public void GetNextRectangleSize_ThrowsArgumentException_OnAnyNegativeOrZeroSize(
+        public void GetNextRectangleSize_ThrowsException_OnAnyNegativeOrZeroSize(
             int width,
             int height)
         {
-            var message = $"Переданное числовое значение должно быть больше 0: {(width <= 0 ? width : height)}";
-            var exception = Assert.Throws<InvalidOperationException>(
-                () => new RandomCloudLayouterWorker(width, width, height, height));
-            exception.Message.Should().Contain(message);
+            var expected = Result
+                .Fail<IEnumerable<(string word, Size size)>>
+                    ($"Переданное числовое значение должно быть больше 0: {(width <= 0 ? width : height)}");
+
+            var worker = new RandomCloudLayouterWorker(width, width, height, height);
+            var actual = worker.GetNextRectangleProperties();
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase(50, 25, 25, 50)]
@@ -28,10 +33,13 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
             int minHeight,
             int maxHeight)
         {
-            var message = "Минимальное значение не может быть больше максимального";
-            var exception = Assert.Throws<InvalidOperationException>(
-                () => new RandomCloudLayouterWorker(minWidth, maxWidth, minHeight, maxHeight));
-            exception.Message.Should().Contain(message);
+            var expected = Result
+                .Fail<IEnumerable<(string word, Size size)>>
+                    ("Минимальное значение не может быть больше максимального");
+
+            var worker = new RandomCloudLayouterWorker(minWidth, maxWidth, minHeight, maxHeight);
+            var actual = worker.GetNextRectangleProperties();
+            actual.Should().BeEquivalentTo(expected);
         }
     }
 }

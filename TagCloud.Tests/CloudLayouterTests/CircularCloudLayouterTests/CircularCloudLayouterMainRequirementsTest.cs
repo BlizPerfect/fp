@@ -44,7 +44,7 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
                 minRectangleHeight,
                 maxRectangleHeight);
             foreach (var rectangleProperty in randomWorker
-                .GetNextRectangleProperties().Take(rectanglesCount))
+                .GetNextRectangleProperties().GetValueOrThrow().Take(rectanglesCount))
             {
                 tags.Add(
                     new Tag(

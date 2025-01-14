@@ -4,32 +4,31 @@ using TagCloud.Parsers;
 
 namespace TagCloud.CloudLayouterWorkers
 {
-    // Класс, со старого задания TagCloud,
-    // выдающий случайный размер прямоугольника
-    // Оставил его для пары тестов.
-    internal class RandomCloudLayouterWorker : ICloudLayouterWorker
+    internal class RandomCloudLayouterWorker(
+        int minRectangleWidth,
+        int maxRectangleWidth,
+        int minRectangleHeight,
+        int maxRectangleHeight) : ICloudLayouterWorker
     {
-        private Random random = new Random();
-        public readonly int MinRectangleWidth;
-        public readonly int MaxRectangleWidth;
-        public readonly int MinRectangleHeight;
-        public readonly int MaxRectangleHeight;
+        private readonly Random random = new Random();
+        public Result<IEnumerable<(string word, Size size)>> GetNextRectangleProperties()
+            => ValidateDimensions()
+                .Then(_ => GenerateRectangles())
+                .OnFail(error => Result.Fail<IEnumerable<(string word, Size size)>>(error));
 
-        public RandomCloudLayouterWorker(
-            int minRectangleWidth,
-            int maxRectangleWidth,
-            int minRectangleHeight,
-            int maxRectangleHeight)
-        {
-            if (AreMinAndMaxSizesAppropriate(minRectangleWidth, maxRectangleWidth).GetValueOrThrow()
-                && AreMinAndMaxSizesAppropriate(minRectangleHeight, maxRectangleHeight).GetValueOrThrow())
-            {
-                MinRectangleWidth = SizeParser.ParseSizeDimension(minRectangleWidth).GetValueOrThrow();
-                MaxRectangleWidth = SizeParser.ParseSizeDimension(maxRectangleWidth).GetValueOrThrow();
-                MinRectangleHeight = SizeParser.ParseSizeDimension(minRectangleHeight).GetValueOrThrow();
-                MaxRectangleHeight = SizeParser.ParseSizeDimension(maxRectangleHeight).GetValueOrThrow();
-            }
-        }
+        private Result<None> ValidateDimensions()
+            => AreMinAndMaxSizesAppropriate(minRectangleWidth, maxRectangleWidth)
+                .Then(_ => AreMinAndMaxSizesAppropriate(minRectangleHeight, maxRectangleHeight))
+                .Then(_ => ParseSizes())
+                .OnFail(error => Result.Fail<None>(error));
+
+        private Result<None> ParseSizes()
+            => SizeParser.ParseSizeDimension(minRectangleWidth)
+                .Then(_ => SizeParser.ParseSizeDimension(maxRectangleWidth)
+                .Then(_ => SizeParser.ParseSizeDimension(minRectangleHeight)
+                .Then(_ => SizeParser.ParseSizeDimension(maxRectangleHeight)
+                .Then(_ => Result.Ok()))))
+                .OnFail(error => Result.Fail<None>(error));
 
         private Result<bool> AreMinAndMaxSizesAppropriate(int min, int max)
         {
@@ -40,12 +39,12 @@ namespace TagCloud.CloudLayouterWorkers
             return true.AsResult();
         }
 
-        public IEnumerable<(string word, Size size)> GetNextRectangleProperties()
+        private IEnumerable<(string word, Size size)> GenerateRectangles()
         {
             while (true)
             {
-                var width = random.Next(MinRectangleWidth, MaxRectangleWidth);
-                var height = random.Next(MinRectangleHeight, MaxRectangleHeight);
+                var width = random.Next(minRectangleWidth, maxRectangleWidth);
+                var height = random.Next(minRectangleHeight, maxRectangleHeight);
                 yield return (string.Empty, new Size(width, height));
             }
         }
