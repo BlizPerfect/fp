@@ -1,4 +1,5 @@
 ﻿using FileSenderRailway;
+using System;
 using System.Drawing;
 
 namespace TagCloud.CloudLayouters.CircularCloudLayouter
@@ -7,11 +8,8 @@ namespace TagCloud.CloudLayouters.CircularCloudLayouter
     // который расставляет прямоугольники по окружности
     // с постепенно увеличивающимся радиусом.
     // Прямоугольники расставляются вокруг точки с координатой (0, 0),
-    // Затем, в CloudLayouterPainter координат пересыитываются таким образом,
+    // Затем, в CloudLayouterPainter координат пересчитываются таким образом,
     // что бы расположить первый прямоугольник в центре холста.
-    // Можно создать интерфейс IShape, который через GetCoordinates
-    // будет возвращать координаты линии формы.
-    // Тогда Circle можно заменить на IShape и ввести новые формы расстановки.
 
     internal class CircularCloudLayouter : ICloudLayouter
     {
@@ -20,50 +18,53 @@ namespace TagCloud.CloudLayouters.CircularCloudLayouter
         private readonly List<Rectangle> rectangles = new List<Rectangle>();
 
         public Result<Rectangle> PutNextRectangle(Size rectangleSize)
+            => ValidateRectangleSize(rectangleSize)
+                .Then(size => PlaceRectangle(size))
+                .OnFail(error => Result.Fail<Rectangle>(error));
+
+        private Result<Size> ValidateRectangleSize(Size rectangleSize)
         {
             if (rectangleSize.Width <= 0 || rectangleSize.Height <= 0)
             {
-                return Result.Fail<Rectangle>("Размеры прямоугольника не могут быть меньше либо равны нуля");
+                return Result.Fail<Size>("Размеры прямоугольника не могут быть меньше либо равны нуля");
             }
 
-            var result = new Rectangle();
-            arrangementСircle.Radius -= 1.0f;
+            return rectangleSize.AsResult();
+        }
 
-            var isPlaced = false;
-            while (!isPlaced)
+        private Result<Rectangle> PlaceRectangle(Size rectangleSize)
+        {
+            return Result.Of(() =>
             {
-                var startAngle = random.Next(360);
-                foreach (var coordinate in arrangementСircle.GetCoordinatesOnCircle(startAngle))
+                var result = new Rectangle();
+                arrangementСircle.Radius -= 1.0f;
+
+                var isPlaced = false;
+                while (!isPlaced)
                 {
-                    var location = GetRectangleLocation(coordinate, rectangleSize);
-                    var nextRectangle = new Rectangle(location, rectangleSize);
-                    if (!IsIntersectionWithAlreadyPlaced(nextRectangle))
+                    var startAngle = random.Next(360);
+                    foreach (var coordinate in arrangementСircle.GetCoordinatesOnCircle(startAngle))
                     {
-                        rectangles.Add(nextRectangle);
-                        isPlaced = true;
-                        result = nextRectangle;
-                        break;
+                        var location = GetRectangleLocation(coordinate, rectangleSize);
+                        var nextRectangle = new Rectangle(location, rectangleSize);
+                        if (!IsIntersectionWithAlreadyPlaced(nextRectangle))
+                        {
+                            rectangles.Add(nextRectangle);
+                            isPlaced = true;
+                            result = nextRectangle;
+                            break;
+                        }
                     }
+
+                    arrangementСircle.Radius += 1.0f;
                 }
 
-                arrangementСircle.Radius += 1.0f;
-            }
-
-            return result.AsResult();
+                return result;
+            });
         }
 
         private bool IsIntersectionWithAlreadyPlaced(Rectangle rectangle)
-        {
-            foreach (var rect in rectangles)
-            {
-                if (rect.IntersectsWith(rectangle))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
+            => rectangles.Any(rect => rect.IntersectsWith(rectangle));
 
         private Point GetRectangleLocation(Point pointOnCircle, Size rectangleSize)
         {

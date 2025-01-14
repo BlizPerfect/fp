@@ -12,7 +12,7 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
         [TestCase(-1, 100)]
         [TestCase(100, 0)]
         [TestCase(100, -1)]
-        public void PutNextRectangle_ThrowsArgumentException_OnAnyNegativeOrZeroSize(
+        public void PutNextRectangle_ThrowsException_OnAnyNegativeOrZeroSize(
             int width,
             int height)
         {
