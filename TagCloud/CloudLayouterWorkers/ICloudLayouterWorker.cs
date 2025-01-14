@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using FileSenderRailway;
+using System.Drawing;
 
 namespace TagCloud.CloudLayouterWorkers
 {
@@ -7,6 +8,6 @@ namespace TagCloud.CloudLayouterWorkers
     // для повышения возможности переиспользования
     internal interface ICloudLayouterWorker
     {
-        public IEnumerable<(string word, Size size)> GetNextRectangleProperties();
+        public Result<IEnumerable<(string word, Size size)>> GetNextRectangleProperties();
     }
 }

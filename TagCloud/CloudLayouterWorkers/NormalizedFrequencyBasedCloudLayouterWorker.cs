@@ -6,11 +6,11 @@ namespace TagCloud.CloudLayouterWorkers
 {
     internal class NormalizedFrequencyBasedCloudLayouterWorker : ICloudLayouterWorker
     {
-        public readonly int MaxRectangleWidth;
-        public readonly int MaxRectangleHeight;
+        private readonly int maxRectangleWidth;
+        private readonly int maxRectangleHeight;
         private readonly Dictionary<string, double> values;
         private readonly string[] keysOrder;
-        public string[] KeysOrder => keysOrder;
+        public string[] KeysOrder => keysOrder.ToArray();
 
         public NormalizedFrequencyBasedCloudLayouterWorker(
             int maxRectangleWidth,
@@ -18,8 +18,8 @@ namespace TagCloud.CloudLayouterWorkers
             Dictionary<string, double> normalizedValues,
             bool isSorted = true)
         {
-            MaxRectangleWidth = SizeParser.ParseSizeDimension(maxRectangleWidth).GetValueOrThrow();
-            MaxRectangleHeight = SizeParser.ParseSizeDimension(maxRectangleHeight).GetValueOrThrow();
+            this.maxRectangleWidth = maxRectangleWidth;
+            this.maxRectangleHeight = maxRectangleHeight;
             values = normalizedValues;
             if (isSorted)
             {
@@ -31,13 +31,24 @@ namespace TagCloud.CloudLayouterWorkers
             }
         }
 
-        public IEnumerable<(string word, Size size)> GetNextRectangleProperties()
+        public Result<IEnumerable<(string word, Size size)>> GetNextRectangleProperties()
+            => ValidateDimensions()
+                .Then(_ => GenerateRectangles())
+                .OnFail(error => Result.Fail<IEnumerable<(string word, Size size)>>(error));
+
+        private Result<None> ValidateDimensions()
+            => SizeParser.ParseSizeDimension(maxRectangleWidth)
+                .Then(_ => SizeParser.ParseSizeDimension(maxRectangleHeight))
+                .Then(_ => Result.Ok())
+                .OnFail(error => Result.Fail<None>(error));
+
+        private IEnumerable<(string word, Size size)> GenerateRectangles()
         {
             foreach (var key in keysOrder)
             {
                 var value = values[key];
-                var width = (int)(MaxRectangleWidth * value);
-                var height = (int)(MaxRectangleHeight * value);
+                var width = (int)(maxRectangleWidth * value);
+                var height = (int)(maxRectangleHeight * value);
                 yield return (key, new Size(width, height));
             }
         }

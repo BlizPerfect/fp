@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using FileSenderRailway;
+using FluentAssertions;
 using System.Drawing;
 using TagCloud.CloudLayouterWorkers;
 
@@ -19,14 +20,20 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
         [TestCase(-1, 100)]
         [TestCase(100, 0)]
         [TestCase(100, -1)]
-        public void GetNextRectangleSize_ThrowsArgumentException_OnAnyNegativeOrZeroSize(
+        public void GetNextRectangleSize_ThrowsException_OnAnyNegativeOrZeroSize(
             int width,
             int height)
         {
-            var message = $"Переданное числовое значение должно быть больше 0: {(width <= 0 ? width : height)}";
-            var exception = Assert.Throws<InvalidOperationException>(
-                () => new NormalizedFrequencyBasedCloudLayouterWorker(width, height, normalizedValues));
-            exception.Message.Should().Contain(message);
+            var expected = Result
+                .Fail<IEnumerable<(string word, Size size)>>
+                    ($"Переданное числовое значение должно быть больше 0: {(width <= 0 ? width : height)}");
+
+            var worker = new NormalizedFrequencyBasedCloudLayouterWorker(
+                width,
+                height,
+                normalizedValues);
+            var actual = worker.GetNextRectangleProperties();
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase(100, 25, false)]
@@ -50,7 +57,7 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
                 normalizedValues,
                 isSortedOrder);
             foreach (var rectangleSize in worker
-                .GetNextRectangleProperties())
+                .GetNextRectangleProperties().GetValueOrThrow())
             {
                 var currentValue = normalizedValues[keys[index]];
                 var expected = new Size((int)(currentValue * width), (int)(currentValue * height));
