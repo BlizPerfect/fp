@@ -1,6 +1,6 @@
 ﻿using FileSenderRailway;
 using System.Drawing;
-using System.IO;
+using System.Drawing.Imaging;
 
 namespace TagCloud.ImageSavers
 {
@@ -9,7 +9,23 @@ namespace TagCloud.ImageSavers
     // Поддерживать разные форматы изображений.
     internal class ImageSaver : IImageSaver
     {
+        private readonly Dictionary<string, ImageFormat> supportedFormats =
+            new Dictionary<string, ImageFormat>()
+        {
+            {"png" , ImageFormat.Png },
+            {"jpg" , ImageFormat.Jpeg },
+            {"jpeg" , ImageFormat.Jpeg },
+            {"bmp" , ImageFormat.Bmp },
+            {"gif" , ImageFormat.Gif },
+            {"tiff" , ImageFormat.Tiff }
+        };
+
         public Result<None> SaveFile(Bitmap image, string fileName, string format = "png")
+            => ValidateInput(image, fileName, format)
+                .Then(_ => SaveImage(image, fileName, format))
+                .OnFail(error => Result.Fail<None>(error));
+
+        private Result<None> ValidateInput(Bitmap image, string fileName, string format)
         {
             if (image is null)
             {
@@ -21,8 +37,22 @@ namespace TagCloud.ImageSavers
                 return Result.Fail<None>("Некорректное имя файла для создания");
             }
 
-            image.Save($"{fileName}.{format}");
+            if (string.IsNullOrWhiteSpace(format) || !IsSupportedFormat(format))
+            {
+                return Result.Fail<None>($"Формат \"{format}\" не поддерживается");
+            }
+
             return Result.Ok();
         }
+
+        private Result<None> SaveImage(Bitmap image, string fileName, string format)
+        {
+            var imageFormat = supportedFormats[format];
+            image.Save($"{fileName}.{format}", imageFormat);
+            return Result.Ok();
+        }
+
+        private bool IsSupportedFormat(string format)
+            => supportedFormats.ContainsKey(format);
     }
 }
