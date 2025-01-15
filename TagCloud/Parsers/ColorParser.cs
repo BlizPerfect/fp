@@ -7,6 +7,10 @@ namespace TagCloud.Parsers
     {
         public static Result<Color> ParseColor(string color)
         {
+            if (string.IsNullOrWhiteSpace(color))
+            {
+                return Result.Fail<Color>($"Некорректная строка {color}");
+            }
             var result = Color.FromName(color);
             if (!result.IsKnownColor)
             {
