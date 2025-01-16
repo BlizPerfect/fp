@@ -5,6 +5,7 @@ using TagCloud.CloudLayouterPainters;
 
 namespace TagCloud.Tests.CloudLayouterPaintersTest
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class CloudLayouterPainterTest
     {
         private CloudLayouterPainter painter;
@@ -33,10 +34,10 @@ namespace TagCloud.Tests.CloudLayouterPaintersTest
         }
 
         [Test]
-        public void Draw_ThrowsException_WithTooSmallTiFitImage()
+        public void Draw_ThrowsException_WithTooSmallToFitImage()
         {
             var expected = Result
-                .Fail<Bitmap>("Все прямоугольники не помещаются на изображение. Измените его размеры");
+                .Fail<Bitmap>("Все прямоугольники не помещаются на изображение");
             var actual = painter
                 .Draw(
                     new Tag[]

@@ -11,77 +11,68 @@ namespace TagCloud.Tests.ParsersTests
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null!)]
-        public void ParseImageSize_ThrowsException_WithInvalidInput(string value)
-        {
-            var expected = Result.Fail<Size>($"Некорректная строка {value}");
-            var actual = SizeParser.ParseImageSize(value);
-            actual.Should().BeEquivalentTo(expected);
-        }
-
         [TestCase("100:")]
         [TestCase(":100")]
         [TestCase("100:100:100")]
         [TestCase("abc")]
-        public void ParseImageSize_ThrowsException_WithIncorrectFormat(string value)
+        public void ParseImageSize_ThrowsException_WithIncorrectFormat(string size)
         {
-            var expected = Result.Fail<Size>($"Некорректный формат размера изображения: \"{value}\", используйте формат \"Ширина:Высота\", например 5000:5000");
-            var actual = SizeParser.ParseImageSize(value);
+            var expected = Result.Fail<Size>(
+                $"Некорректный формат размера изображения \"{size}\", используйте формат \"Ширина:Высота\"");
+            var actual = SizeParser.ParseImageSize(size);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("abc:100")]
         [TestCase("100:abc")]
         [TestCase("abc:abc")]
-        public void ParseImageSize_ThrowsException_WithIncorrectInput(string value)
+        public void ParseImageSize_ThrowsException_WithIncorrectInput(string size)
         {
-            var expected = Result.Fail<Size>($"Передано не число: abc");
-            var actual = SizeParser.ParseImageSize(value);
+            var expected = Result.Fail<Size>($"Передано не число \"abc\"");
+            var actual = SizeParser.ParseImageSize(size);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("0:100")]
+        [TestCase("-1:100")]
         [TestCase("100:0")]
+        [TestCase("100:-1")]
         [TestCase("0:0")]
-        public void ParseImageSize_ThrowsException_WithInputLessThanZero(string value)
+        [TestCase("-1:-1")]
+        public void ParseImageSize_ThrowsException_WithInputLessThanZero(string size)
         {
-            var expected = Result.Fail<Size>($"Переданное числовое значение должно быть больше 0: 0");
-            var actual = SizeParser.ParseImageSize(value);
+            var wrongValue = size.Contains("-1") ? "-1" : "0";
+            var expected = Result.Fail<Size>($"Переданное числовое значение должно быть больше 0: \"{wrongValue}\"");
+            var actual = SizeParser.ParseImageSize(size);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null!)]
-        public void ParseSizeDimension_ThrowsException_WithInvalidInputAsString(string value)
-        {
-            var expected = Result.Fail<int>($"Некорректная строка {value}");
-            var actual = SizeParser.ParseSizeDimension(value);
-            actual.Should().BeEquivalentTo(expected);
-        }
-
         [TestCase("abc")]
-        public void ParseSizeDimension_ThrowsException_WithIncorrectInputAsString(string value)
+        public void ParseSizeDimension_ThrowsException_WithIncorrectInputAsString(string size)
         {
-            var expected = Result.Fail<int>($"Передано не число: {value}");
-            var actual = SizeParser.ParseSizeDimension(value);
+            var expected = Result.Fail<int>($"Передано не число \"{size}\"");
+            var actual = SizeParser.ParseSizeDimension(size);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("0")]
         [TestCase("-1")]
-        public void ParseSizeDimension_ThrowsException_WithInputLessThanZeroAsString(string value)
+        public void ParseSizeDimension_ThrowsException_WithInputLessThanZeroAsString(string size)
         {
-            var expected = Result.Fail<int>($"Переданное числовое значение должно быть больше 0: {value}");
-            var actual = SizeParser.ParseSizeDimension(value);
+            var expected = Result.Fail<int>($"Переданное числовое значение должно быть больше 0: \"{size}\"");
+            var actual = SizeParser.ParseSizeDimension(size);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("0")]
         [TestCase("-1")]
-        public void ParseSizeDimension_ThrowsException_WithInputLessThanZeroAsInt(int value)
+        public void ParseSizeDimension_ThrowsException_WithInputLessThanZeroAsInt(int size)
         {
-            var expected = Result.Fail<int>($"Переданное числовое значение должно быть больше 0: {value}");
-            var actual = SizeParser.ParseSizeDimension(value);
+            var expected = Result.Fail<int>($"Переданное числовое значение должно быть больше 0: \"{size}\"");
+            var actual = SizeParser.ParseSizeDimension(size);
             actual.Should().BeEquivalentTo(expected);
         }
     }

@@ -11,19 +11,19 @@ namespace TagCloud.Tests.ParsersTests
         [TestCase(" ")]
         [TestCase(null!)]
         [TestCase("abc")]
-        public void BoolParser_ThrowsException_WithInvalidInput(string value)
+        public void BoolParser_ThrowsException_WithInvalidInput(string sorted)
         {
-            var expected = Result.Fail<bool>($"Неизвестный параметр сортировки {value}");
-            var actual = BoolParser.ParseIsSorted(value);
+            var expected = Result.Fail<bool>($"Неизвестный параметр сортировки \"{sorted}\"");
+            var actual = BoolParser.ParseIsSorted(sorted);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [TestCase("True")]
         [TestCase("False")]
-        public void BoolParser_WorksCorrectly(string value)
+        public void BoolParser_WorksCorrectly(string sorted)
         {
-            var expected = Convert.ToBoolean(value);
-            var actual = BoolParser.ParseIsSorted(value).GetValueOrThrow();
+            var expected = Convert.ToBoolean(sorted);
+            var actual = BoolParser.ParseIsSorted(sorted).GetValueOrThrow();
             actual.Should().Be(expected);
         }
     }

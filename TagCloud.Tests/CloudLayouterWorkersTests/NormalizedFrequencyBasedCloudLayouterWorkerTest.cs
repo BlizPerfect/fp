@@ -26,7 +26,7 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
         {
             var expected = Result
                 .Fail<IEnumerable<(string word, Size size)>>
-                    ($"Переданное числовое значение должно быть больше 0: {(width <= 0 ? width : height)}");
+                    ($"Переданное числовое значение должно быть больше 0: \"{(width <= 0 ? width : height)}\"");
 
             var worker = new NormalizedFrequencyBasedCloudLayouterWorker(
                 width,
@@ -44,7 +44,8 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
             string[]? keys = null;
             if (isSortedOrder)
             {
-                keys = normalizedValues.OrderByDescending(x => x.Value).Select(x => x.Key).ToArray();
+                keys = normalizedValues
+                    .OrderByDescending(x => x.Value).Select(x => x.Key).ToArray();
             }
             else
             {

@@ -11,18 +11,11 @@ namespace TagCloud.Tests.ParsersTests
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null!)]
-        public void ColorParser_ThrowsException_WithInvalidInput(string value)
-        {
-            var expected = Result.Fail<Color>($"Некорректная строка {value}");
-            var actual = ColorParser.ParseColor(value);
-            actual.Should().BeEquivalentTo(expected);
-        }
-
         [TestCase("abc")]
-        public void ColorParser_ThrowsException_WithUnknownColor(string value)
+        public void ColorParser_ThrowsException_WithInvalidColor(string color)
         {
-            var expected = Result.Fail<Color>($"Неизвестный цвет {value}");
-            var actual = ColorParser.ParseColor(value);
+            var expected = Result.Fail<Color>($"Неизвестный цвет \"{color}\"");
+            var actual = ColorParser.ParseColor(color);
             actual.Should().BeEquivalentTo(expected);
         }
 
@@ -32,10 +25,10 @@ namespace TagCloud.Tests.ParsersTests
         [TestCase("black")]
         [TestCase("green")]
         [TestCase("yellow")]
-        public void ColorParser_WorksCorrectly(string value)
+        public void ColorParser_WorksCorrectly(string color)
         {
-            var expected = Color.FromName(value);
-            var actual = ColorParser.ParseColor(value).GetValueOrThrow();
+            var expected = Color.FromName(color);
+            var actual = ColorParser.ParseColor(color).GetValueOrThrow();
             actual.Should().Be(expected);
         }
     }

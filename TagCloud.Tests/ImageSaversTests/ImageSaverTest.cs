@@ -2,10 +2,12 @@
 using FluentAssertions;
 using System.Drawing;
 using TagCloud.ImageSavers;
+using TagCloud.Tests.Utilities;
 
 namespace TagCloud.Tests.ImageSaversTests
 {
     [TestFixture]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class ImageSaverTest
     {
         private readonly string directoryPath = "TempFilesForImageSaverTests";
@@ -32,13 +34,13 @@ namespace TagCloud.Tests.ImageSaversTests
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [TestCase(null)]
         [TestCase("")]
         [TestCase(" ")]
+        [TestCase(null)]
         public void SaveFile_ThrowsException_WithInvalidFilename(string? filename)
         {
             var dummyImage = new Bitmap(1, 1);
-            var expected = Result.Fail<None>("Некорректное имя файла для создания");
+            var expected = Result.Fail<None>($"Некорректное имя файла для создания \"{filename}\"");
             var actual = imageSaver.SaveFile(dummyImage, filename!);
             actual.Should().BeEquivalentTo(expected);
         }
@@ -75,10 +77,7 @@ namespace TagCloud.Tests.ImageSaversTests
         [OneTimeTearDown]
         public void OneTimeCleanup()
         {
-            if (Directory.Exists(directoryPath))
-            {
-                Directory.Delete(directoryPath, true);
-            }
+            FileUtilities.DeleteDirectory(directoryPath);
         }
     }
 }

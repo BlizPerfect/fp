@@ -1,64 +1,60 @@
 ﻿using Autofac;
+using FileSenderRailway;
 using FluentAssertions;
+using TagCloud.Tests.OptionsTests;
+using TagCloud.Tests.Utilities;
 namespace TagCloud.Tests
 {
     [TestFixture]
-    internal class MainTest
+    internal class MainTest() : BaseOptionTest("MainTest")
     {
-        private static string directoryPath = "TempFilesForMainTest";
-        private static readonly string dataFile = Path.Combine(directoryPath, "TestData.txt");
-        private readonly string imageFile = Path.Combine(directoryPath, "Test");
-
-        [OneTimeSetUp]
-        public void Init()
+        [Test]
+        public void Program_ExecutesSuccessfully_WithValidArguments()
         {
-            Directory.CreateDirectory(directoryPath);
-            File.WriteAllLines(dataFile, new string[]
-            {
-                "One",
-                "One",
-                "Two",
-                "Three",
-                "Four",
-                "Four",
-                "Four",
-                "Four"
-            });
-        }
+            var expected = Result.Ok();
 
-        [TestCase("bmp")]
-        public void Program_ExecutesSuccessfully_WithValidArguments(string format)
-        {
+            var wordsToIncludePath = Path.Combine(directoryPath, "ToInclude.txt");
+            FileUtilities.CreateDataFile(
+                directoryPath,
+                wordsToIncludePath,
+                new string[]
+                {
+                    "snow",
+                    "white"
+                });
+
+            var wordsToExcludePath = Path.Combine(directoryPath, "ToExclude.txt");
+            FileUtilities.CreateDataFile(
+                directoryPath,
+                wordsToExcludePath,
+                new string[]
+                {
+                    "the"
+                });
+
             var options = new CommandLineOptions
             {
-                BackgroundColor = "Red",
-                TextColor = "Blue",
+                BackgroundColor = "Black",
+                TextColor = "Yellow",
                 Font = "Calibri",
-                IsSorted = true.ToString(),
+                IsSorted = Boolean.FalseString,
                 ImageSize = "1000:1000",
-                MaxRectangleHeight = 100,
-                MaxRectangleWidth = 200,
+                MaxRectangleHeight = "100",
+                MaxRectangleWidth = "200",
                 ImageFileName = imageFile,
                 DataFileName = dataFile,
-                ResultFormat = format
+                ResultFormat = "bmp",
+                WordsToIncludeFileName = wordsToIncludePath,
+                WordsToExcludeFileName = wordsToExcludePath,
             };
 
             var container = DIContainer.ConfigureContainer(options);
             using var scope = container.BeginLifetimeScope();
             var executor = scope.Resolve<ProgramExecutor>();
+            var actual = executor.Execute();
 
-            Assert.DoesNotThrow(() => executor.Execute());
-
-            File.Exists($"{imageFile}.{format}").Should().BeTrue();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeCleanup()
-        {
-            if (Directory.Exists(directoryPath))
-            {
-                Directory.Delete(directoryPath, true);
-            }
+            actual.Should().BeEquivalentTo(expected);
+            File.Exists($"{imageFile}.{options.ResultFormat}").Should().BeTrue();
         }
     }
 }

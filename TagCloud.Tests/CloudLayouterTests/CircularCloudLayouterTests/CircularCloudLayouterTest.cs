@@ -17,7 +17,8 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
             int height)
         {
             var size = new Size(width, height);
-            var expected = Result.Fail<Rectangle>("Размеры прямоугольника не могут быть меньше либо равны нуля");
+            var expected = Result.Fail<Rectangle>(
+                "Размеры прямоугольника не могут быть меньше либо равны нуля");
             var actual = new CircularCloudLayouter().PutNextRectangle(size);
             actual.Should().BeEquivalentTo(expected);
         }

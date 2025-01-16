@@ -1,5 +1,7 @@
 ﻿using FileSenderRailway;
 using FluentAssertions;
+using TagCloud.Tests.OptionsTests;
+using TagCloud.Tests.Utilities;
 using TagCloud.WordReaders;
 
 namespace TagCloud.Tests.WordReadersTests
@@ -9,21 +11,11 @@ namespace TagCloud.Tests.WordReadersTests
     {
         private readonly string directoryPath = "TempFilesForWordReaderTests";
 
-        private readonly string fileWithCorrectValuesPath = "correctFile.txt";
-        private readonly string[] correctValues = new string[]
-        {
-            "One",
-            "One",
-            "Two",
-            "Three",
-            "Four",
-            "Four",
-            "Four",
-            "Four"
-        };
+        private readonly string fileWithCorrectValuesPath = "CorrectFile.txt";
 
-        private readonly string fileWithIncorrectValuesPath = "incorrectFile.txt";
-        private readonly string[] incorrectValues = new string[]
+        private readonly string fileWithMoreThanOneWordInLinePath
+            = "InvalidFile_MoreThanOneWordInLine.txt";
+        private readonly string[] moreThanOneWordInLineValues = new string[]
         {
             "One",
             "Two",
@@ -31,22 +23,30 @@ namespace TagCloud.Tests.WordReadersTests
             "Four"
         };
 
+        private readonly string fileEmptyPath = "InvalidFile_Empty.txt";
+
         private WordReader wordReader;
 
         [OneTimeSetUp]
         public void Init()
         {
-            Directory.CreateDirectory(directoryPath);
-            File.WriteAllLines(
-                Path.Combine(
+            FileUtilities
+                .CreateDataFile(
                     directoryPath,
-                    fileWithCorrectValuesPath),
-                    correctValues);
-            File.WriteAllLines
-                (Path.Combine(
+                    Path.Combine(directoryPath, fileWithCorrectValuesPath),
+                    ValidValues.ValidDataFileContent);
+
+            FileUtilities
+                .CreateDataFile(
                     directoryPath,
-                    fileWithIncorrectValuesPath),
-                    incorrectValues);
+                    Path.Combine(directoryPath, fileWithMoreThanOneWordInLinePath),
+                    moreThanOneWordInLineValues);
+
+            FileUtilities
+                .CreateDataFile(
+                    directoryPath,
+                    Path.Combine(directoryPath, fileEmptyPath),
+                    Array.Empty<string>());
         }
 
         [SetUp]
@@ -55,23 +55,50 @@ namespace TagCloud.Tests.WordReadersTests
             wordReader = new WordReader();
         }
 
+        [TestCase("")]
         [TestCase(" ")]
-        [TestCase("ThisFileDoesNotExist.txt")]
+        [TestCase("NonExistingFile.txt")]
         public void WordReader_ThrowsFileNotFoundException_WithInvalidFilename(string filename)
         {
             var path = Path.Combine(directoryPath, filename);
-            var expected = Result.Fail<string>($"Файл {path} не существует");
-            var actual = wordReader.ReadByLines(path).ToArray();
-            actual.Should().Contain(expected).And.HaveCount(1);
+            var expected = Result.Fail<IEnumerable<string>>($"Файл \"{path}\" не существует");
+            var actual = wordReader.ReadByLines(path);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
         public void WordReader_ThrowsException_WithTwoWordsInOneLine()
         {
-            var path = Path.Combine(directoryPath, fileWithIncorrectValuesPath);
-            var expected = Result.Fail<string>($"Файл {path} содержит строку с двумя и более словами");
-            var actual = wordReader.ReadByLines(path).ToArray();
-            actual.Should().Contain(expected);
+            var path = Path.Combine(directoryPath, fileWithMoreThanOneWordInLinePath);
+            var expected = Result.Fail<IEnumerable<string>>($"Файл \"{path}\" содержит строку с двумя и более словами");
+            var actual = wordReader.ReadByLines(path);
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Test]
+        public void WordReader_ThrowsException_WithEmpty()
+        {
+            var path = Path.Combine(directoryPath, fileEmptyPath);
+            var expected = Result.Fail<IEnumerable<string>>($"Файл \"{path}\" пустой");
+            var actual = wordReader.ReadByLines(path);
+            actual.Should().BeEquivalentTo(expected);
+        }
+
+        [TestCase("FileDoc.doc")]
+        [TestCase("FileImg.png")]
+        public void WordReader_ThrowsException_WithNonTxt(string filename)
+        {
+            FileUtilities
+                .CreateDataFile(
+                    directoryPath,
+                    Path.Combine(directoryPath, filename),
+                    Array.Empty<string>());
+
+            var path = Path.Combine(directoryPath, filename);
+            var expected = Result.Fail<IEnumerable<string>>(
+                $"Файл \"{path}\" должен иметь расширение \"txt\"");
+            var actual = wordReader.ReadByLines(path);
+            actual.Should().BeEquivalentTo(expected);
         }
 
         [OneTimeTearDown]

@@ -11,18 +11,11 @@ namespace TagCloud.Tests.ParsersTests
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null!)]
-        public void FontParser_ThrowsException_WithInvalidInput(string value)
-        {
-            var expected = Result.Fail<FontFamily>($"Некорректная строка {value}");
-            var actual = FontParser.ParseFont(value);
-            actual.Should().BeEquivalentTo(expected);
-        }
-
         [TestCase("abc")]
-        public void FontParser_ThrowsException_WithUnknownColor(string value)
+        public void FontParser_ThrowsException_WithInvalidFont(string font)
         {
-            var expected = Result.Fail<FontFamily>($"Неизвестный шрифт {value}");
-            var actual = FontParser.ParseFont(value);
+            var expected = Result.Fail<FontFamily>($"Неизвестный шрифт \"{font}\"");
+            var actual = FontParser.ParseFont(font);
             actual.Should().BeEquivalentTo(expected);
         }
 
@@ -30,10 +23,10 @@ namespace TagCloud.Tests.ParsersTests
         [TestCase("Times New Roman")]
         [TestCase("Georgia")]
         [TestCase("Verdana")]
-        public void FontParser_WorksCorrectly(string value)
+        public void FontParser_WorksCorrectly(string font)
         {
-            var expected = new FontFamily(value);
-            var actual = FontParser.ParseFont(value).GetValueOrThrow();
+            var expected = new FontFamily(font);
+            var actual = FontParser.ParseFont(font).GetValueOrThrow();
             actual.Should().BeEquivalentTo(expected);
         }
     }

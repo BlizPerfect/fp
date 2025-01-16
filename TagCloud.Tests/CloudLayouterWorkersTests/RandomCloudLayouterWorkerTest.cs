@@ -18,7 +18,7 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
         {
             var expected = Result
                 .Fail<IEnumerable<(string word, Size size)>>
-                    ($"Переданное числовое значение должно быть больше 0: {(width <= 0 ? width : height)}");
+                    ($"Переданное числовое значение должно быть больше 0: \"{(width <= 0 ? width : height)}\"");
 
             var worker = new RandomCloudLayouterWorker(width, width, height, height);
             var actual = worker.GetNextRectangleProperties();
@@ -27,7 +27,7 @@ namespace TagCloud.Tests.CloudLayouterWorkersTests
 
         [TestCase(50, 25, 25, 50)]
         [TestCase(25, 50, 50, 25)]
-        public void GetNextRectangleSize_ThrowsArgumentException_OnNonConsecutiveSizeValues(
+        public void GetNextRectangleSize_ThrowsException_OnNonConsecutiveSizeValues(
             int minWidth,
             int maxWidth,
             int minHeight,

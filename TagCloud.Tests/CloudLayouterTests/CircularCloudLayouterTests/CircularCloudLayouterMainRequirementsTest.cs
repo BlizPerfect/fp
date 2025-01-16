@@ -9,6 +9,7 @@ using TagCloud.Tests.Extensions;
 namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
 {
     [TestFixture]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class CircularCloudLayouterMainRequirementsTest
     {
         private Point center = new Point();
@@ -49,7 +50,8 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
                 tags.Add(
                     new Tag(
                         rectangleProperty.word,
-                        circularCloudLayouter.PutNextRectangle(rectangleProperty.size).GetValueOrThrow()));
+                        circularCloudLayouter.PutNextRectangle(rectangleProperty.size)
+                        .GetValueOrThrow()));
             }
             rectangles = tags.Select(x => x.Rectangle).ToArray();
         }
@@ -91,7 +93,8 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
                 for (var j = i + 1; j < rectangles.Length; j++)
                 {
                     Assert.That(
-                        rectangles[i].IntersectsWith(rectangles[j]) == false,
+                        rectangles[i].IntersectsWith(rectangles[j]),
+                        Is.EqualTo(false),
                         $"Прямоугольники пересекаются:\n" +
                         $"{rectangles[i].ToString()}\n" +
                         $"{rectangles[j].ToString()}");

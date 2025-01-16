@@ -2,7 +2,7 @@
 using FluentAssertions;
 using TagCloud.Normalizers;
 
-namespace TagCloud.Tests.NormalaizersTest
+namespace TagCloud.Tests.NormalizersTest
 {
     [TestFixture]
     internal class NormalizerTest
@@ -31,7 +31,8 @@ namespace TagCloud.Tests.NormalaizersTest
         public void Normalize_ThrowsException_WithInvalidMinCoefficient(
             double minCoefficient)
         {
-            var expected = Result.Fail<Dictionary<string, double>>("Минимальный коэффициент нормализации должен быть в диапазоне от 0 до 1");
+            var expected = Result.Fail<Dictionary<string, double>>(
+                "Минимальный коэффициент нормализации должен быть в диапазоне от 0 до 1");
             var actual = normalizer.Normalize(values, minCoefficient, defaultDecimalPlaces);
             actual.Should().BeEquivalentTo(expected);
         }
@@ -39,15 +40,18 @@ namespace TagCloud.Tests.NormalaizersTest
         [Test]
         public void Normalize_ThrowsException_WithEmptyValues()
         {
-            var expected = Result.Fail<Dictionary<string, double>>("Словарь значений не может быть пустым");
-            var actual = normalizer.Normalize(new Dictionary<string, uint>(), defaultMinCoefficient, defaultDecimalPlaces);
+            var expected = Result.Fail<Dictionary<string, double>>(
+                "Словарь значений не может быть пустым");
+            var actual = normalizer.Normalize(
+                new Dictionary<string, uint>(), defaultMinCoefficient, defaultDecimalPlaces);
             actual.Should().BeEquivalentTo(expected);
         }
 
         [Test]
         public void Normalize_ThrowsException_WithValuesAsNull()
         {
-            var expected = Result.Fail<Dictionary<string, double>>("Словарь значений не может быть пустым");
+            var expected = Result.Fail<Dictionary<string, double>>(
+                "Словарь значений не может быть пустым");
             var actual = normalizer.Normalize(null!, defaultMinCoefficient, defaultDecimalPlaces);
             actual.Should().BeEquivalentTo(expected);
         }
@@ -56,7 +60,8 @@ namespace TagCloud.Tests.NormalaizersTest
         public void Normalize_ThrowsException_WithInvalidDecimalPlaces(
             int decimalPlaces)
         {
-            var expected = Result.Fail<Dictionary<string, double>>("Количество знаков после запятой не может быть отрицательным");
+            var expected = Result.Fail<Dictionary<string, double>>(
+                "Количество знаков после запятой не может быть отрицательным");
             var actual = normalizer.Normalize(values, defaultMinCoefficient, decimalPlaces);
             actual.Should().BeEquivalentTo(expected);
         }
@@ -72,8 +77,6 @@ namespace TagCloud.Tests.NormalaizersTest
             }
             var expected = dict.AsResult();
             var actual = normalizer.Normalize(values, minCoefficient, decimalPlaces);
-            actual.IsSuccess.Should().Be(expected.IsSuccess);
-            actual.Error.Should().Be(expected.Error);
             actual.Value.Should().BeEquivalentTo(expected.Value);
         }
     }
