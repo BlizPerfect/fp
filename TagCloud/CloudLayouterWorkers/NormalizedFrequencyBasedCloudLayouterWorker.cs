@@ -13,13 +13,13 @@ namespace TagCloud.CloudLayouterWorkers
         public string[] KeysOrder => keysOrder.ToArray();
 
         public NormalizedFrequencyBasedCloudLayouterWorker(
-            int maxRectangleWidth,
-            int maxRectangleHeight,
+            int maxWidth,
+            int maxHeight,
             Dictionary<string, double> normalizedValues,
             bool isSorted = true)
         {
-            this.maxRectangleWidth = maxRectangleWidth;
-            this.maxRectangleHeight = maxRectangleHeight;
+            maxRectangleWidth = maxWidth;
+            maxRectangleHeight = maxHeight;
             values = normalizedValues;
             if (isSorted)
             {

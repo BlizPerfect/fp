@@ -9,14 +9,17 @@ namespace TagCloud.Parsers
         {
             if (string.IsNullOrWhiteSpace(color))
             {
-                return Result.Fail<Color>($"Некорректная строка {color}");
+                return GetError(color);
             }
             var result = Color.FromName(color);
             if (!result.IsKnownColor)
             {
-                return Result.Fail<Color>($"Неизвестный цвет {color}");
+                return GetError(color);
             }
             return result.AsResult();
         }
+
+        private static Result<Color> GetError(string color)
+            => Result.Fail<Color>($"Неизвестный цвет \"{color}\"");
     }
 }

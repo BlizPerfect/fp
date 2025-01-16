@@ -7,6 +7,7 @@ namespace TagCloud.ImageSavers
     // Реализован пункт на перспективу:
     // Формат результата.
     // Поддерживать разные форматы изображений.
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class ImageSaver : IImageSaver
     {
         private readonly Dictionary<string, ImageFormat> supportedFormats =
@@ -34,7 +35,7 @@ namespace TagCloud.ImageSavers
 
             if (string.IsNullOrWhiteSpace(fileName))
             {
-                return Result.Fail<None>("Некорректное имя файла для создания");
+                return Result.Fail<None>($"Некорректное имя файла для создания \"{fileName}\"");
             }
 
             if (string.IsNullOrWhiteSpace(format) || !IsSupportedFormat(format))

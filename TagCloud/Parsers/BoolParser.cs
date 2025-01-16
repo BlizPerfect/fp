@@ -10,7 +10,7 @@ namespace TagCloud.Parsers
             {
                 return Convert.ToBoolean(value).AsResult();
             }
-            return Result.Fail<bool>($"Неизвестный параметр сортировки {value}");
+            return Result.Fail<bool>($"Неизвестный параметр сортировки \"{value}\"");
         }
     }
 }

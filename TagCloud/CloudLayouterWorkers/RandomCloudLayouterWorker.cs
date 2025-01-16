@@ -30,7 +30,7 @@ namespace TagCloud.CloudLayouterWorkers
                 .Then(_ => Result.Ok()))))
                 .OnFail(error => Result.Fail<None>(error));
 
-        private Result<bool> AreMinAndMaxSizesAppropriate(int min, int max)
+        private static Result<bool> AreMinAndMaxSizesAppropriate(int min, int max)
         {
             if (min > max)
             {

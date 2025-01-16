@@ -40,25 +40,6 @@
             "ouch", "ow", "phew", "shh", "tsk", "ugh", "um", "wow", "yay", "yes", "yikes"
         };
 
-        public WordFilter(IList<string>? toAdd = null, IList<string>? toExclude = null)
-        {
-            if (toAdd is not null)
-            {
-                foreach (var word in toAdd)
-                {
-                    Add(word);
-                }
-            }
-
-            if (toExclude is not null)
-            {
-                foreach (var word in toExclude)
-                {
-                    Remove(word);
-                }
-            }
-        }
-
         public bool Add(string word) => bannedWords.Add(word);
 
         public bool Remove(string word) => bannedWords.Remove(word);

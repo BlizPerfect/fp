@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using CommandLine;
+using FileSenderRailway;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("TagCloud.Tests")]
@@ -20,7 +21,9 @@ namespace TagCloud
             {
                 Console.WriteLine("Ошибка парсинга аргументов:");
                 foreach (var error in errors)
+                {
                     Console.WriteLine(error.ToString());
+                }
             });
         }
 
@@ -28,7 +31,10 @@ namespace TagCloud
         {
             using var scope = container.BeginLifetimeScope();
             var program = scope.Resolve<ProgramExecutor>();
-            program.Execute();
+            program
+                .Execute()
+                .Then(_ => Console.WriteLine("Изображение успешно сгенерировано."))
+                .OnFail(error => Console.WriteLine(error));
         }
     }
 }

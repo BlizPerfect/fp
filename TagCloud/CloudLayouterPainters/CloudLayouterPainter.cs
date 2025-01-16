@@ -3,6 +3,7 @@ using System.Drawing;
 
 namespace TagCloud.CloudLayouterPainters
 {
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class CloudLayouterPainter(
         Size imageSize,
         Color? backgroundColor = null,
@@ -14,11 +15,9 @@ namespace TagCloud.CloudLayouterPainters
         private readonly FontFamily fontName = fontName ?? new FontFamily("Arial");
 
         public Result<Bitmap> Draw(IList<Tag> tags)
-        {
-            return ValidateTags(tags)
+            => ValidateTags(tags)
                 .Then(validTags => CreateBitmap(validTags))
                 .OnFail(error => Result.Fail<Bitmap>(error));
-        }
 
         private Result<IList<Tag>> ValidateTags(IList<Tag> tags)
         {
@@ -35,15 +34,14 @@ namespace TagCloud.CloudLayouterPainters
             if (!DoRectanglesFit(tags))
             {
                 return Result
-                    .Fail<IList<Tag>>("Все прямоугольники не помещаются на изображение. Измените его размеры");
+                    .Fail<IList<Tag>>("Все прямоугольники не помещаются на изображение");
             }
 
             return tags.AsResult();
         }
 
         private Result<Bitmap> CreateBitmap(IList<Tag> tags)
-        {
-            return Result.Of(() =>
+            => Result.Of(() =>
             {
                 var bitmap = new Bitmap(imageSize.Width, imageSize.Height);
 
@@ -64,12 +62,17 @@ namespace TagCloud.CloudLayouterPainters
 
                 return bitmap;
             });
-        }
 
         private bool DoRectanglesFit(IList<Tag> tags)
         {
-            var minimums = new Point(tags.Min(t => t.Rectangle.Left), tags.Min(t => t.Rectangle.Top));
-            var maximums = new Point(tags.Max(t => t.Rectangle.Right), tags.Max(t => t.Rectangle.Bottom));
+            var minimums = new Point(
+                tags.Min(t => t.Rectangle.Left),
+                tags.Min(t => t.Rectangle.Top));
+
+            var maximums = new Point(
+                tags.Max(t => t.Rectangle.Right),
+                tags.Max(t => t.Rectangle.Bottom));
+
             var actualWidth = maximums.X - minimums.X;
             var actualHeight = maximums.Y - minimums.Y;
             return actualWidth < imageSize.Width && actualHeight < imageSize.Height;

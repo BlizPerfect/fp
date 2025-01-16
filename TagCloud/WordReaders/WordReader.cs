@@ -4,23 +4,29 @@ namespace TagCloud.WordReaders
 {
     internal class WordReader : IWordReader
     {
-        public IEnumerable<Result<string>> ReadByLines(string path)
+        public Result<IEnumerable<string>> ReadByLines(string path)
         {
             if (!File.Exists(path))
             {
-                yield return Result.Fail<string>($"Файл {path} не существует");
-                yield break;
+                return Result.Fail<IEnumerable<string>>($"Файл \"{path}\" не существует");
             }
 
-            foreach (var line in File.ReadAllLines(path))
+            if (path.Split('.')[^1] != "txt")
             {
-                if (line.Contains(' '))
-                {
-                    yield return Result.Fail<string>($"Файл {path} содержит строку с двумя и более словами");
-                    yield break;
-                }
-                yield return line.AsResult();
+                return Result.Fail<IEnumerable<string>>($"Файл \"{path}\" должен иметь расширение \"txt\"");
             }
+
+            var lines = File.ReadAllLines(path);
+            if (lines.Length == 0)
+            {
+                return Result.Fail<IEnumerable<string>>($"Файл \"{path}\" пустой");
+            }
+            if (lines.Any(line => line.Contains(' ')))
+            {
+                return Result.Fail<IEnumerable<string>>($"Файл \"{path}\" содержит строку с двумя и более словами");
+            }
+
+            return lines.AsEnumerable().AsResult();
         }
     }
 }

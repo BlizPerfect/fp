@@ -3,7 +3,7 @@
     internal class WordCounter : IWordCounter
     {
         private readonly Dictionary<string, uint> counts = new Dictionary<string, uint>();
-        public Dictionary<string, uint> Values => counts;
+        public Dictionary<string, uint> Values => counts.ToDictionary();
 
         public void AddWord(string word)
         {

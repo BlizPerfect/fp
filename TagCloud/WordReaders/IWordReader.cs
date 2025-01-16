@@ -5,6 +5,6 @@ namespace TagCloud.WordReaders
     // Интерфейс для построчного чтения содержимого файла
     internal interface IWordReader
     {
-        public IEnumerable<Result<string>> ReadByLines(string path);
+        public Result<IEnumerable<string>> ReadByLines(string path);
     }
 }

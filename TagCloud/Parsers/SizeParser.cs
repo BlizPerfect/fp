@@ -5,17 +5,20 @@ namespace TagCloud.Parsers
 {
     internal static class SizeParser
     {
+        private static Result<Size> GetErrorInvalidSize(string size)
+            => Result.Fail<Size>($"Некорректный формат размера изображения \"{size}\", используйте формат \"Ширина:Высота\"");
+
         public static Result<Size> ParseImageSize(string size)
         {
             if (string.IsNullOrWhiteSpace(size))
             {
-                return Result.Fail<Size>($"Некорректная строка {size}");
+                return GetErrorInvalidSize(size);
             }
 
             var dimensions = size.Split(':', StringSplitOptions.RemoveEmptyEntries);
             if (dimensions.Length != 2)
             {
-                return Result.Fail<Size>($"Некорректный формат размера изображения: \"{size}\", используйте формат \"Ширина:Высота\", например 5000:5000");
+                return GetErrorInvalidSize(size);
             }
 
             var width = ParseSizeDimension(dimensions[0]);
@@ -35,13 +38,9 @@ namespace TagCloud.Parsers
 
         public static Result<int> ParseSizeDimension(string dimension)
         {
-            if (string.IsNullOrWhiteSpace(dimension))
+            if (string.IsNullOrWhiteSpace(dimension) || !int.TryParse(dimension, out var result))
             {
-                return Result.Fail<int>($"Некорректная строка {dimension}");
-            }
-            if (!int.TryParse(dimension, out var result))
-            {
-                return Result.Fail<int>($"Передано не число: {dimension}");
+                return Result.Fail<int>($"Передано не число \"{dimension}\"");
             }
             return ParseSizeDimension(result);
         }
@@ -50,7 +49,7 @@ namespace TagCloud.Parsers
         {
             if (dimension <= 0)
             {
-                return Result.Fail<int>($"Переданное числовое значение должно быть больше 0: {dimension}");
+                return Result.Fail<int>($"Переданное числовое значение должно быть больше 0: \"{dimension}\"");
             }
             return dimension.AsResult();
         }

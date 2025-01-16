@@ -2,88 +2,78 @@
 
 namespace TagCloud
 {
-    // 1. Нужно добавить опцию для указания имени файла,
-    //    который содержит слова, для иссключения из фильтра скучных слов
-    // 2. Нужно добавить опцию для указания имени файла,
-    //    который содержит слова, для добавления в фильтр скучных слов
     public class CommandLineOptions
     {
         [Option(
             "backgroundColor",
             Required = false,
-            HelpText = "Цвет заднего фона изображения, например White.")]
+            HelpText = "Цвет заднего фона изображения, например \"White\".")]
         public string BackgroundColor { get; set; } = "White";
 
         [Option(
             "textColor",
             Required = false,
-            HelpText = "Цвет текста на изображении, например Black.")]
+            HelpText = "Цвет текста на изображении, например \"Black\".")]
         public string TextColor { get; set; } = "Black";
 
         [Option(
             "font",
             Required = false,
-            HelpText = "Шрифт текста на изображении, например Arial.")]
+            HelpText = "Шрифт текста на изображении, например \"Arial\".")]
         public string Font { get; set; } = "Arial";
 
         [Option(
             "nonSorted",
             Required = false,
-            HelpText = "Отключение сортировки слов, например False")]
-        public string IsSorted { get; set; } = true.ToString();
+            HelpText = "Отключение сортировки слов, например \"False\".")]
+        public string IsSorted { get; set; } = Boolean.TrueString;
 
         [Option(
             "size",
             Required = false,
-            HelpText = "Размер изображения в формате ШИРИНА:ВЫСОТА, например 5000:5000.")]
+            HelpText = "Размер изображения в формате ШИРИНА:ВЫСОТА, например \"5000:5000\".")]
         public string ImageSize { get; set; } = "5000:5000";
 
         [Option(
             "maxRectangleWidth",
             Required = false,
-            HelpText = "Максимальная ширина прямоугольника.")]
-        public int MaxRectangleWidth { get; set; } = 500;
+            HelpText = "Максимальная ширина прямоугольника, например \"500\".")]
+        public string MaxRectangleWidth { get; set; } = "500";
 
         [Option(
             "maxRectangleHeight",
             Required = false,
-            HelpText = "Максимальная высота прямоугольника.")]
-        public int MaxRectangleHeight { get; set; } = 200;
+            HelpText = "Максимальная высота прямоугольника, например \"200\".")]
+        public string MaxRectangleHeight { get; set; } = "200";
 
         [Option(
             "imageFile",
             Required = false,
-            HelpText = "Имя выходного файла изображения.")]
+            HelpText = "Имя выходного файла изображения, например \"Result\".")]
         public string ImageFileName { get; set; } = "Result";
 
         [Option(
             "dataFile",
             Required = true,
-            HelpText = "Имя файла с исходными данными.")]
+            HelpText = "Полный путь к файлу с исходными данными, например \"C:\\MyWorkSpace\\Coding\\MyCodes\\CSharp\\PostUniversityEra\\ShporaHomeworks\\Homework.6.TagCloudII\\SnowWhite.txt\".")]
         public required string DataFileName { get; set; }
 
         [Option(
             "resultFormat",
             Required = false,
-            HelpText = "Формат создаваемого изображение, например png.")]
+            HelpText = "Формат создаваемого изображение, например \"png\".")]
         public string ResultFormat { get; set; } = "png";
-
-        [Option(
-            "normalizeMinCoefficient",
-            Required = false,
-            HelpText = "Минимальный коэффициент нормализации, например 0.25")]
-        public double NormalizeMinCoefficient { get; set; } = 0.25;
 
         [Option(
             "wordsToIncludeFile",
             Required = false,
-            HelpText = "Имя файла со словами для добавления в фильтр \"скучных слов\".")]
-        public string? WordsToIncludeFileName { get; set; } = null;
+            HelpText = "Полный путь к файлу со словами для добавления в фильтр \"скучных слов\", например \"C:\\MyWorkSpace\\Coding\\MyCodes\\CSharp\\PostUniversityEra\\ShporaHomeworks\\Homework.6.TagCloudII\\WordsToInclude.txt\".")]
+        public string? WordsToIncludeFileName { get; set; } = null; //+
 
         [Option(
             "wordsToExcludeFile",
             Required = false,
-            HelpText = "Имя файла со словами для исключения из фильтра \"скучных слов\".")]
-        public string? WordsToExcludeFileName { get; set; } = null;
+            HelpText = "Полный путь к файлу со словами для исключения из фильтра \"скучных слов\", например \"C:\\MyWorkSpace\\Coding\\MyCodes\\CSharp\\PostUniversityEra\\ShporaHomeworks\\Homework.6.TagCloudII\\WordsToExclude.txt\".")]
+        public string? WordsToExcludeFileName { get; set; } = null; //+
     }
 }

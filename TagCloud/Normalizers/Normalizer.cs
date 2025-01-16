@@ -17,7 +17,7 @@ namespace TagCloud.Normalizers
                 .Then(_ => CalculateNormalizedValues(values, minCoefficient, decimalPlaces))
                 .OnFail(error => Result.Fail<Dictionary<string, double>>(error));
 
-        private Result<None> ValidateInput(
+        private static Result<None> ValidateInput(
             Dictionary<string, uint> values,
             double minCoefficient,
             int decimalPlaces)
@@ -29,12 +29,14 @@ namespace TagCloud.Normalizers
 
             if (minCoefficient < 0.0 || minCoefficient > 1.0)
             {
-                return Result.Fail<None>("Минимальный коэффициент нормализации должен быть в диапазоне от 0 до 1");
+                return Result.Fail<None>(
+                    "Минимальный коэффициент нормализации должен быть в диапазоне от 0 до 1");
             }
 
             if (decimalPlaces < 0)
             {
-                return Result.Fail<None>("Количество знаков после запятой не может быть отрицательным");
+                return Result.Fail<None>(
+                    "Количество знаков после запятой не может быть отрицательным");
             }
 
             return Result.Ok();
@@ -68,7 +70,7 @@ namespace TagCloud.Normalizers
             });
 
 
-        private double CalculateNormalizedValue(
+        private static double CalculateNormalizedValue(
             double minCoefficient,
             double scale,
             uint value,

@@ -1,5 +1,4 @@
 ﻿using FileSenderRailway;
-using System;
 using System.Drawing;
 
 namespace TagCloud.CloudLayouters.CircularCloudLayouter
@@ -22,7 +21,7 @@ namespace TagCloud.CloudLayouters.CircularCloudLayouter
                 .Then(size => PlaceRectangle(size))
                 .OnFail(error => Result.Fail<Rectangle>(error));
 
-        private Result<Size> ValidateRectangleSize(Size rectangleSize)
+        private static Result<Size> ValidateRectangleSize(Size rectangleSize)
         {
             if (rectangleSize.Width <= 0 || rectangleSize.Height <= 0)
             {
@@ -33,8 +32,7 @@ namespace TagCloud.CloudLayouters.CircularCloudLayouter
         }
 
         private Result<Rectangle> PlaceRectangle(Size rectangleSize)
-        {
-            return Result.Of(() =>
+            => Result.Of(() =>
             {
                 var result = new Rectangle();
                 arrangementСircle.Radius -= 1.0f;
@@ -61,12 +59,11 @@ namespace TagCloud.CloudLayouters.CircularCloudLayouter
 
                 return result;
             });
-        }
 
         private bool IsIntersectionWithAlreadyPlaced(Rectangle rectangle)
             => rectangles.Any(rect => rect.IntersectsWith(rectangle));
 
-        private Point GetRectangleLocation(Point pointOnCircle, Size rectangleSize)
+        private static Point GetRectangleLocation(Point pointOnCircle, Size rectangleSize)
         {
             var x = pointOnCircle.X - rectangleSize.Width / 2;
             var y = pointOnCircle.Y - rectangleSize.Height / 2;

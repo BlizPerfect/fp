@@ -1,53 +1,66 @@
-﻿using TagCloud.WordFilters;
+﻿using FileSenderRailway;
+using TagCloud.CloudLayouterWorkers;
+using TagCloud.WordFilters;
 using TagCloud.WordReaders;
 
 namespace TagCloud.Factories
 {
-    internal class WordFilterFactory
+    internal class WordFilterFactory : IWordFilterFactory
     {
-        public IWordFilter Create(
+        public Result<IWordFilter> Create(
             string? wordsToIncludeFileName,
             string? wordsToExcludeFileName,
             IWordReader wordReader)
-        {
-            var result = new WordFilter();
+            => Result.Ok<IWordFilter>(new WordFilter())
+                .Then(wordFilter => AddWords(wordReader, wordsToIncludeFileName!, wordFilter))
+                .Then(wordFilter => RemoveWords(wordReader, wordsToExcludeFileName!, wordFilter))
+                .OnFail(error => Result.Fail<ICloudLayouterWorker>(error));
 
-            if (IsFileNameCorrect(wordsToIncludeFileName))
-            {
-                AddWords(wordReader, wordsToIncludeFileName!, result);
-            }
+        private static bool IsFileNameSet(string? fileName)
+            => fileName is not null;
 
-            if (IsFileNameCorrect(wordsToExcludeFileName))
-            {
-                RemoveWords(wordReader, wordsToExcludeFileName!, result);
-            }
-
-            return result;
-        }
-
-        private bool IsFileNameCorrect(string? fileName)
-            => !string.IsNullOrEmpty(fileName) && !string.IsNullOrWhiteSpace(fileName);
-
-        private void AddWords(
+        private static Result<IWordFilter> AddWords(
             IWordReader wordReader,
             string wordsToIncludeFileName,
-            WordFilter wordFilter)
+            IWordFilter wordFilter)
         {
-            foreach (var word in wordReader.ReadByLines(wordsToIncludeFileName))
+            if (IsFileNameSet(wordsToIncludeFileName))
             {
-                wordFilter.Add(word.GetValueOrThrow().ToLower());
+                var wordsResult = wordReader.ReadByLines(wordsToIncludeFileName);
+                if (!wordsResult.IsSuccess)
+                {
+                    return Result.Fail<IWordFilter>(wordsResult.Error);
+                }
+
+                foreach (var word in wordsResult.Value)
+                {
+                    wordFilter.Add(word.ToLower());
+                }
             }
+
+            return Result.Ok(wordFilter);
         }
 
-        private void RemoveWords(
+        private static Result<IWordFilter> RemoveWords(
             IWordReader wordReader,
             string wordsToExcludeFileName,
-            WordFilter wordFilter)
+            IWordFilter wordFilter)
         {
-            foreach (var word in wordReader.ReadByLines(wordsToExcludeFileName))
+            if (IsFileNameSet(wordsToExcludeFileName))
             {
-                wordFilter.Remove(word.GetValueOrThrow().ToLower());
+                var wordsResult = wordReader.ReadByLines(wordsToExcludeFileName);
+                if (!wordsResult.IsSuccess)
+                {
+                    return Result.Fail<IWordFilter>(wordsResult.Error);
+                }
+
+                foreach (var word in wordsResult.Value)
+                {
+                    wordFilter.Remove(word.ToLower());
+                }
             }
+
+            return Result.Ok(wordFilter);
         }
     }
 }
