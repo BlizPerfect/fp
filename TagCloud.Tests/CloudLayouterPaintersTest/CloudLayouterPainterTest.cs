@@ -9,44 +9,33 @@ namespace TagCloud.Tests.CloudLayouterPaintersTest
     [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class CloudLayouterPainterTest
     {
-        private CloudLayouterPainter painter;
-
-        [SetUp]
-        public void SetUp()
+        private static TestCaseData[] invalidTestCases = new TestCaseData[]
         {
-            painter = new CloudLayouterPainter(new Size(1, 1));
-        }
+            new TestCaseData(
+                "Список тегов пуст",
+                new  List<Tag>())
+            .SetArgDisplayNames("EmptyTags"),
+            new TestCaseData(
+                "Tags передан как null",
+                null)
+            .SetArgDisplayNames("TagsAsNull"),
+            new TestCaseData(
+                "Все прямоугольники не помещаются на изображение",
+                new Tag[]
+                {
+                    new Tag(
+                        "Test",
+                        new Rectangle(new Point(0, 0), new Size(100, 100)))
+                })
+            .SetArgDisplayNames("TooSmallToFitImage"),
+        };
 
-        [Test]
-        public void Draw_ThrowsException_WithEmptyTags()
+        [TestCaseSource(nameof(invalidTestCases))]
+        public void Draw_ThrowsException_WithInvalidCases(string errorMessage, IList<Tag> tags)
         {
-            var expected = Result.Fail<Bitmap>("Список тегов пуст");
-            var actual = painter.Draw(new List<Tag>());
-            actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Test]
-        public void Draw_ThrowsException_WithTagsAsNull()
-        {
-
-            var expected = Result.Fail<Bitmap>("Tags передан как null");
-            var actual = painter.Draw(null!);
-            actual.Should().BeEquivalentTo(expected);
-        }
-
-        [Test]
-        public void Draw_ThrowsException_WithTooSmallToFitImage()
-        {
-            var expected = Result
-                .Fail<Bitmap>("Все прямоугольники не помещаются на изображение");
-            var actual = painter
-                .Draw(
-                    new Tag[]
-                    {
-                        new Tag(
-                            "Test",
-                            new Rectangle(new Point(0, 0), new Size(100, 100)))
-                    });
+            var painter = new CloudLayouterPainter(new Size(1, 1));
+            var expected = Result.Fail<Bitmap>(errorMessage);
+            var actual = painter.Draw(tags);
             actual.Should().BeEquivalentTo(expected);
         }
     }
