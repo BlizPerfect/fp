@@ -25,8 +25,6 @@ namespace TagCloud.Tests.WordReadersTests
 
         private readonly string fileEmptyPath = "InvalidFile_Empty.txt";
 
-        private WordReader wordReader;
-
         [OneTimeSetUp]
         public void Init()
         {
@@ -49,17 +47,12 @@ namespace TagCloud.Tests.WordReadersTests
                     Array.Empty<string>());
         }
 
-        [SetUp]
-        public void SetUp()
-        {
-            wordReader = new WordReader();
-        }
-
         [TestCase("")]
         [TestCase(" ")]
         [TestCase("NonExistingFile.txt")]
         public void WordReader_ThrowsFileNotFoundException_WithInvalidFilename(string filename)
         {
+            var wordReader = new WordReader();
             var path = Path.Combine(directoryPath, filename);
             var expected = Result.Fail<IEnumerable<string>>($"Файл \"{path}\" не существует");
             var actual = wordReader.ReadByLines(path);
@@ -69,6 +62,7 @@ namespace TagCloud.Tests.WordReadersTests
         [Test]
         public void WordReader_ThrowsException_WithTwoWordsInOneLine()
         {
+            var wordReader = new WordReader();
             var path = Path.Combine(directoryPath, fileWithMoreThanOneWordInLinePath);
             var expected = Result.Fail<IEnumerable<string>>($"Файл \"{path}\" содержит строку с двумя и более словами");
             var actual = wordReader.ReadByLines(path);
@@ -78,6 +72,7 @@ namespace TagCloud.Tests.WordReadersTests
         [Test]
         public void WordReader_ThrowsException_WithEmpty()
         {
+            var wordReader = new WordReader();
             var path = Path.Combine(directoryPath, fileEmptyPath);
             var expected = Result.Fail<IEnumerable<string>>($"Файл \"{path}\" пустой");
             var actual = wordReader.ReadByLines(path);
@@ -88,6 +83,7 @@ namespace TagCloud.Tests.WordReadersTests
         [TestCase("FileImg.png")]
         public void WordReader_ThrowsException_WithNonTxt(string filename)
         {
+            var wordReader = new WordReader();
             FileUtilities
                 .CreateDataFile(
                     directoryPath,

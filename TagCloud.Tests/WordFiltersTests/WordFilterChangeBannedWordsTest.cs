@@ -6,17 +6,10 @@ namespace TagCloud.Tests.WordFiltersTests
     [TestFixture]
     internal class WordFilterChangeBannedWordsTest
     {
-        private WordFilter wordFilter;
-
-        [SetUp]
-        public void SetUp()
-        {
-            wordFilter = new WordFilter();
-        }
-
         [Test]
         public void Clear_ShouldClearBannedWordList()
         {
+            var wordFilter = new WordFilter();
             wordFilter.Clear();
             wordFilter.BannedWords.Should().BeEmpty();
         }
@@ -24,6 +17,7 @@ namespace TagCloud.Tests.WordFiltersTests
         [Test]
         public void Add_ShouldAddWord_ToBannedWords()
         {
+            var wordFilter = new WordFilter();
             var wordToAdd = "WordToAdd";
             wordFilter.Clear();
             wordFilter.Add(wordToAdd);
@@ -31,8 +25,9 @@ namespace TagCloud.Tests.WordFiltersTests
         }
 
         [Test]
-        public void Remove_ShouldRemoveWord_InBannedWords(string word)
+        public void Remove_ShouldRemoveWord_InBannedWords()
         {
+            var wordFilter = new WordFilter();
             var wordToRemove = "WordToRemove";
             wordFilter.Clear();
             wordFilter.Add(wordToRemove);

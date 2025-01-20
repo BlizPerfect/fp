@@ -6,17 +6,10 @@ namespace TagCloud.Tests.WordCountersTests
     [TestFixture]
     internal class WordCounterTest
     {
-        private WordCounter wordCounter;
-
-        [SetUp]
-        public void SetUp()
-        {
-            wordCounter = new WordCounter();
-        }
-
         [Test]
         public void WordCounter_CountsCorrect()
         {
+            var wordCounter = new WordCounter();
             var expected = new Dictionary<string, uint>()
             {
                 { "One", 2 },
