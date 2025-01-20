@@ -8,9 +8,10 @@ namespace TagCloud.Tests.OptionsTests
     [TestFixture]
     internal class WordsToIncludeFileNameTests() : BaseOptionTest("WordsToIncludeFileName")
     {
-        [TestCase("NonExistingFile.txt")]
-        public void Program_WorksCorrectly_WithNonExistingFilename(string wordsToIncludeFileName)
+        [Test]
+        public void Program_WorksCorrectly_WithNonExistingFilename()
         {
+            var wordsToIncludeFileName = "NonExistingFile.txt";
             options.WordsToIncludeFileName = wordsToIncludeFileName;
             var expected = Result.Fail<None>($"Файл \"{wordsToIncludeFileName}\" не существует");
 
@@ -22,11 +23,9 @@ namespace TagCloud.Tests.OptionsTests
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [TestCase("InvalidFile_MoreThanOneWordInLine.txt")]
-        public void Program_WorksCorrectly_WithFileWithMoreThanOneWordInLine(
-            string wordsToIncludeFileName)
+        public void Program_WorksCorrectly_WithFileWithMoreThanOneWordInLine()
         {
-            var path = Path.Combine(directoryPath, wordsToIncludeFileName);
+            var path = Path.Combine(directoryPath, "InvalidFile_MoreThanOneWordInLine.txt");
             var invalidContent = new string[]
             {
                 "one",
@@ -47,10 +46,10 @@ namespace TagCloud.Tests.OptionsTests
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [TestCase("InvalidFile_MoreThanOneWordInLine.txt")]
-        public void Program_WorksCorrectly_WithEmptyFile(string wordsToIncludeFileName)
+        [Test]
+        public void Program_WorksCorrectly_WithEmptyFile()
         {
-            var path = Path.Combine(directoryPath, wordsToIncludeFileName);
+            var path = Path.Combine(directoryPath, "InvalidFile_MoreThanOneWordInLine.txt");
             FileUtilities.CreateDataFile(directoryPath, path, Array.Empty<string>());
 
             options.WordsToIncludeFileName = path;

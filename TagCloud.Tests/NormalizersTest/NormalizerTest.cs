@@ -56,19 +56,18 @@ namespace TagCloud.Tests.NormalizersTest
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [TestCase(-1)]
-        public void Normalize_ThrowsException_WithInvalidDecimalPlaces(
-            int decimalPlaces)
+        [Test]
+        public void Normalize_ThrowsException_WithInvalidDecimalPlaces()
         {
             var expected = Result.Fail<Dictionary<string, double>>(
                 "Количество знаков после запятой не может быть отрицательным");
-            var actual = normalizer.Normalize(values, defaultMinCoefficient, decimalPlaces);
+            var actual = normalizer.Normalize(values, defaultMinCoefficient, -1);
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [TestCase(0.25, 4)]
-        [TestCase(0.25, 2)]
-        public void Normalize_CalculatesСorrectly(double minCoefficient, int decimalPlaces)
+        [TestCase(4)]
+        [TestCase(2)]
+        public void Normalize_CalculatesСorrectly(int decimalPlaces)
         {
             var dict = new Dictionary<string, double>();
             foreach (var pair in expectedResult)
@@ -76,7 +75,7 @@ namespace TagCloud.Tests.NormalizersTest
                 dict[pair.Key] = Math.Round(pair.Value, decimalPlaces);
             }
             var expected = dict.AsResult();
-            var actual = normalizer.Normalize(values, minCoefficient, decimalPlaces);
+            var actual = normalizer.Normalize(values, defaultMinCoefficient, decimalPlaces);
             actual.Value.Should().BeEquivalentTo(expected.Value);
         }
     }

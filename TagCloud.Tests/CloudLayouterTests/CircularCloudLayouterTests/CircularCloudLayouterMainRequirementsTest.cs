@@ -57,10 +57,13 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
             rectangles = tags.Select(x => x.Rectangle).ToArray();
         }
 
-        [TestCase(0.7, 1000)]
+        [Test]
         [Repeat(10)]
-        public void ShouldPlaceRectanglesInCircle(double expectedCoverageRatio, int gridSize)
+        public void ShouldPlaceRectanglesInCircle()
         {
+            var expectedCoverageRatio = 0.7;
+            var gridSize = 1000;
+
             var maxRadius = rectangles.Max(
                 x => x.GetMaxDistanceFromPointToRectangleAngles(center));
             var step = 2 * maxRadius / gridSize;
@@ -71,10 +74,12 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
             actualCoverageRatio.Should().BeGreaterThanOrEqualTo(expectedCoverageRatio);
         }
 
-        [TestCase(15)]
+        [Test]
         [Repeat(10)]
-        public void ShouldPlaceCenterOfMassOfRectanglesNearCenter(int tolerance)
+        public void ShouldPlaceCenterOfMassOfRectanglesNearCenter()
         {
+            var tolerance = 15;
+
             var centerX = rectangles.Average(r => r.Left + r.Width / 2.0);
             var centerY = rectangles.Average(r => r.Top + r.Height / 2.0);
             var actualCenter = new Point((int)centerX, (int)centerY);

@@ -25,10 +25,10 @@ namespace TagCloud.Tests.OptionsTests
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [TestCase("InvalidFile_MoreThanOneWordInLine.txt")]
-        public void Program_WorksCorrectly_WithFileWithMoreThanOneWordInLine(string dataFileName)
+        [Test]
+        public void Program_WorksCorrectly_WithFileWithMoreThanOneWordInLine()
         {
-            var path = Path.Combine(directoryPath, dataFileName);
+            var path = Path.Combine(directoryPath, "InvalidFile_MoreThanOneWordInLine.txt");
             var invalidContent = new string[]
             {
                 "one",
@@ -50,10 +50,10 @@ namespace TagCloud.Tests.OptionsTests
             actual.Should().BeEquivalentTo(expected);
         }
 
-        [TestCase("InvalidFile_MoreThanOneWordInLine.txt")]
-        public void Program_WorksCorrectly_WithEmptyFile(string dataFileName)
+        [Test]
+        public void Program_WorksCorrectly_WithEmptyFile()
         {
-            var path = Path.Combine(directoryPath, dataFileName);
+            var path = Path.Combine(directoryPath, "InvalidFile_MoreThanOneWordInLine.txt");
             FileUtilities.CreateDataFile(directoryPath, path, Array.Empty<string>());
 
             options.DataFileName = path;

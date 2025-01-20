@@ -21,21 +21,23 @@ namespace TagCloud.Tests.WordFiltersTests
             wordFilter.BannedWords.Should().BeEmpty();
         }
 
-        [TestCase("WordToAdd")]
-        public void Add_ShouldAddWord_ToBannedWords(string word)
+        [Test]
+        public void Add_ShouldAddWord_ToBannedWords()
         {
+            var wordToAdd = "WordToAdd";
             wordFilter.Clear();
-            wordFilter.Add(word);
-            wordFilter.BannedWords.Should().Contain(word).And.HaveCount(1);
+            wordFilter.Add(wordToAdd);
+            wordFilter.BannedWords.Should().Contain(wordToAdd).And.HaveCount(1);
         }
 
-        [TestCase("WordToRemove")]
+        [Test]
         public void Remove_ShouldRemoveWord_InBannedWords(string word)
         {
+            var wordToRemove = "WordToRemove";
             wordFilter.Clear();
-            wordFilter.Add(word);
-            wordFilter.Remove(word);
-            wordFilter.BannedWords.Should().NotContain(word);
+            wordFilter.Add(wordToRemove);
+            wordFilter.Remove(wordToRemove);
+            wordFilter.BannedWords.Should().NotContain(wordToRemove);
         }
     }
 }

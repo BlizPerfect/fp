@@ -26,10 +26,10 @@ namespace TagCloud.Tests.ImageSaversTests
             imageSaver = new ImageSaver();
         }
 
-        [TestCase("Test")]
-        public void SaveFile_ThrowsException_WithNullBitmap(string filename)
+        [Test]
+        public void SaveFile_ThrowsException_WithNullBitmap()
         {
-            var path = Path.Combine(directoryPath, filename);
+            var path = Path.Combine(directoryPath, "Test");
             var expected = Result.Fail<None>("Передаваемое изображение не должно быть null");
             var actual = imageSaver.SaveFile(null!, path);
             actual.Should().BeEquivalentTo(expected);
