@@ -6,7 +6,7 @@ using TagCloud.Tests.Utilities;
 namespace TagCloud.Tests
 {
     [TestFixture]
-    internal class MainTest() : BaseOptionTest("MainTest")
+    internal class FullProgramExecutionTest() : BaseOptionTest("FullProgramExecutionTest")
     {
         [Test]
         public void Program_ExecutesSuccessfully_WithValidArguments()
