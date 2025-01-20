@@ -5,10 +5,11 @@ using TagCloud.ImageSavers;
 using TagCloud.Factories;
 using TagCloud.Parsers;
 using System.Drawing;
+using System.Diagnostics.CodeAnalysis;
 
 namespace TagCloud
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class ProgramExecutor(
         string backgroundColor,
         string textColor,

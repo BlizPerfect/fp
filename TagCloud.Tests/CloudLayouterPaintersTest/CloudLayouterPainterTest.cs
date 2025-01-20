@@ -1,11 +1,12 @@
 ﻿using FileSenderRailway;
 using FluentAssertions;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using TagCloud.CloudLayouterPainters;
 
 namespace TagCloud.Tests.CloudLayouterPaintersTest
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class CloudLayouterPainterTest
     {
         private CloudLayouterPainter painter;

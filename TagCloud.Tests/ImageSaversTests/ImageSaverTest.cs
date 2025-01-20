@@ -1,5 +1,6 @@
 ﻿using FileSenderRailway;
 using FluentAssertions;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using TagCloud.ImageSavers;
 using TagCloud.Tests.Utilities;
@@ -7,7 +8,7 @@ using TagCloud.Tests.Utilities;
 namespace TagCloud.Tests.ImageSaversTests
 {
     [TestFixture]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class ImageSaverTest
     {
         private readonly string directoryPath = "TempFilesForImageSaverTests";

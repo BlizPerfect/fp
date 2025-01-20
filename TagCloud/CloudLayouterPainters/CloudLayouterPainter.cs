@@ -1,9 +1,10 @@
 ﻿using FileSenderRailway;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace TagCloud.CloudLayouterPainters
 {
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class CloudLayouterPainter(
         Size imageSize,
         Color? backgroundColor = null,

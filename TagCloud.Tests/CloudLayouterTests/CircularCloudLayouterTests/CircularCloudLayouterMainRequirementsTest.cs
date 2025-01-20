@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using TagCloud.CloudLayouterPainters;
 using TagCloud.CloudLayouters.CircularCloudLayouter;
@@ -9,7 +10,7 @@ using TagCloud.Tests.Extensions;
 namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
 {
     [TestFixture]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
     internal class CircularCloudLayouterMainRequirementsTest
     {
         private Point center = new Point();
