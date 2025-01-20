@@ -8,7 +8,7 @@ namespace TagCloud.Tests.ParsersTests
 {
     [TestFixture]
     [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
-    internal class FontParserTest
+    internal class FontParserTests
     {
         [TestCase("")]
         [TestCase(" ")]

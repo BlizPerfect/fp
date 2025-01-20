@@ -5,16 +5,16 @@ using FluentAssertions;
 namespace TagCloud.Tests.OptionsTests
 {
     [TestFixture]
-    internal class MaxRectangleHeightTest() : BaseOptionTest("MaxRectangleHeight")
+    internal class MaxRectangleWidthTests() : BaseOptionTest("MaxRectangleWidth")
     {
         [TestCase("")]
         [TestCase(" ")]
         [TestCase(null!)]
         [TestCase("abc")]
-        public void Program_WorksCorrectly_WithNotANumber(string maxRectangleHeight)
+        public void Program_WorksCorrectly_WithNotANumber(string maxRectangleWidth)
         {
-            options.MaxRectangleWidth = maxRectangleHeight;
-            var expected = Result.Fail<None>($"Передано не число \"{maxRectangleHeight}\"");
+            options.MaxRectangleWidth = maxRectangleWidth;
+            var expected = Result.Fail<None>($"Передано не число \"{maxRectangleWidth}\"");
 
             var container = DIContainer.ConfigureContainer(options);
             using var scope = container.BeginLifetimeScope();
@@ -26,11 +26,11 @@ namespace TagCloud.Tests.OptionsTests
 
         [TestCase("0")]
         [TestCase("-1")]
-        public void Program_WorksCorrectly_WithNumberZeroOrLess(string maxRectangleHeight)
+        public void Program_WorksCorrectly_WithNumberZeroOrLess(string maxRectangleWidth)
         {
-            options.MaxRectangleWidth = maxRectangleHeight;
+            options.MaxRectangleWidth = maxRectangleWidth;
             var expected = Result.Fail<None>(
-                $"Переданное числовое значение должно быть больше 0: \"{maxRectangleHeight}\"");
+                $"Переданное числовое значение должно быть больше 0: \"{maxRectangleWidth}\"");
 
             var container = DIContainer.ConfigureContainer(options);
             using var scope = container.BeginLifetimeScope();

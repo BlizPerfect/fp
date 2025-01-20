@@ -6,7 +6,7 @@ using TagCloud.Tests.Utilities;
 namespace TagCloud.Tests.OptionsTests
 {
     [TestFixture]
-    internal class DataFileNameTest() : BaseOptionTest("DataFileName")
+    internal class DataFileNameTests() : BaseOptionTest("DataFileName")
     {
         [TestCase("")]
         [TestCase(" ")]

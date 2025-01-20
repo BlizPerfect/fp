@@ -7,7 +7,7 @@ using TagCloud.WordReaders;
 namespace TagCloud.Tests.WordReadersTests
 {
     [TestFixture]
-    internal class WordReaderTest
+    internal class WordReaderTests
     {
         private readonly string directoryPath = "TempFilesForWordReaderTests";
 

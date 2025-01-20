@@ -3,10 +3,10 @@ using FluentAssertions;
 using System.Drawing;
 using TagCloud.CloudLayouters.CircularCloudLayouter;
 
-namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
+namespace TagCloud.Tests.CloudLayoutersTests.CircularCloudLayouterTests
 {
     [TestFixture]
-    internal class CircularCloudLayouterTest
+    internal class CircularCloudLayouterTests
     {
         [TestCase(0, 100)]
         [TestCase(-1, 100)]

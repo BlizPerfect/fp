@@ -4,7 +4,7 @@ using TagCloud.WordFilters;
 namespace TagCloud.Tests.WordFiltersTests
 {
     [TestFixture]
-    internal class WordFilterChangeBannedWordsTest
+    internal class WordFilterChangeBannedWordsTests
     {
         [Test]
         public void Clear_ShouldClearBannedWordList()

@@ -4,7 +4,7 @@ using TagCloud.WordFilters;
 namespace TagCloud.Tests.WordFiltersTests
 {
     [TestFixture]
-    internal class WordFilterDefaultBannedWordsTest
+    internal class WordFilterDefaultBannedWordsTests
     {
         private readonly WordFilter wordFilter = new WordFilter();
 

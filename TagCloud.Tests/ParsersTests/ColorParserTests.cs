@@ -6,7 +6,7 @@ using TagCloud.Parsers;
 namespace TagCloud.Tests.ParsersTests
 {
     [TestFixture]
-    internal class ColorParserTest
+    internal class ColorParserTests
     {
         [TestCase("")]
         [TestCase(" ")]

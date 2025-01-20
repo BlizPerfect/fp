@@ -9,7 +9,7 @@ namespace TagCloud.Tests.ImageSaversTests
 {
     [TestFixture]
     [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
-    internal class ImageSaverTest
+    internal class ImageSaverTests
     {
         private readonly string directoryPath = "TempFilesForImageSaverTests";
 

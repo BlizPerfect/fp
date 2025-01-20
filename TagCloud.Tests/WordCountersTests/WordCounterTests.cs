@@ -5,7 +5,7 @@ using TagCloud.WordCounters;
 namespace TagCloud.Tests.WordCountersTests
 {
     [TestFixture]
-    internal class WordCounterTest
+    internal class WordCounterTests
     {
         [Test]
         public void WordCounter_CountsCorrect()

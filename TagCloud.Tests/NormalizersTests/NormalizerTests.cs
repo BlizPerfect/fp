@@ -2,10 +2,10 @@
 using FluentAssertions;
 using TagCloud.Normalizers;
 
-namespace TagCloud.Tests.NormalizersTest
+namespace TagCloud.Tests.NormalizersTests
 {
     [TestFixture]
-    internal class NormalizerTest
+    internal class NormalizerTests
     {
         private readonly Normalizer normalizer = new Normalizer();
         private readonly Dictionary<string, uint> values = new Dictionary<string, uint>

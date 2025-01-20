@@ -6,7 +6,7 @@ using TagCloud.CloudLayouterWorkers;
 namespace TagCloud.Tests.CloudLayouterWorkersTests
 {
     [TestFixture]
-    internal class NormalizedFrequencyBasedCloudLayouterWorkerTest
+    internal class NormalizedFrequencyBasedCloudLayouterWorkerTests
     {
         private readonly Dictionary<string, double> normalizedValues
             = new Dictionary<string, double>

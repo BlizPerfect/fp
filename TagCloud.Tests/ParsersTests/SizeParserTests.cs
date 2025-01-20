@@ -6,7 +6,7 @@ using TagCloud.Parsers;
 namespace TagCloud.Tests.ParsersTests
 {
     [TestFixture]
-    internal class SizeParserTest
+    internal class SizeParserTests
     {
         [TestCase("")]
         [TestCase(" ")]

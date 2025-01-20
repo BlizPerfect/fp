@@ -4,13 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using TagCloud.CloudLayouterPainters;
 
-namespace TagCloud.Tests.CloudLayouterPaintersTest
+namespace TagCloud.Tests.CloudLayouterPaintersTests
 {
     [TestFixture]
     [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
-    internal class CloudLayouterPainterTest
+    internal class CloudLayouterPainterTests
     {
-        private static TestCaseData[] invalidTestCases = new TestCaseData[]
+        private static readonly TestCaseData[] invalidTestCases = new TestCaseData[]
         {
             new TestCaseData(
                 "Список тегов пуст",

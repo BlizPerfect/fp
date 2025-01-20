@@ -5,7 +5,7 @@ using TagCloud.Parsers;
 namespace TagCloud.Tests.ParsersTests
 {
     [TestFixture]
-    internal class BoolParserTest
+    internal class BoolParserTests
     {
         [TestCase("")]
         [TestCase(" ")]

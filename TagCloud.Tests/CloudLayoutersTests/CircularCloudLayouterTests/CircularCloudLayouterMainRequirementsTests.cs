@@ -7,11 +7,11 @@ using TagCloud.CloudLayouterWorkers;
 using TagCloud.ImageSavers;
 using TagCloud.Tests.Extensions;
 
-namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
+namespace TagCloud.Tests.CloudLayoutersTests.CircularCloudLayouterTests
 {
     [TestFixture]
     [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
-    internal class CircularCloudLayouterMainRequirementsTest
+    internal class CircularCloudLayouterMainRequirementsTests
     {
         private Point center = new Point();
         private Rectangle[] rectangles;
@@ -102,8 +102,8 @@ namespace TagCloud.Tests.CloudLayouterTests.CircularCloudLayouterTests
                         rectangles[i].IntersectsWith(rectangles[j]),
                         Is.EqualTo(false),
                         $"Прямоугольники пересекаются:\n" +
-                        $"{rectangles[i].ToString()}\n" +
-                        $"{rectangles[j].ToString()}");
+                        $"{rectangles[i]}\n" +
+                        $"{rectangles[j]}");
                 }
             }
         }
