@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using TagCloud.Tests.OptionsTests;
 using TagCloud.WordCounters;
 
 namespace TagCloud.Tests.WordCountersTests
@@ -10,26 +11,14 @@ namespace TagCloud.Tests.WordCountersTests
         public void WordCounter_CountsCorrect()
         {
             var wordCounter = new WordCounter();
-            var expected = new Dictionary<string, uint>()
+            var expected = new Dictionary<string, uint>();
+            foreach (var word in ValidValues.ValidDataFileContent)
             {
-                { "One", 2 },
-                { "Two", 1 },
-                { "Three", 1 },
-                { "Four", 4 },
-            };
-            var values = new string[]
-            {
-                "One",
-                "One",
-                "Two",
-                "Three",
-                "Four",
-                "Four",
-                "Four",
-                "Four"
-            };
+                expected.TryGetValue(word, out var count);
+                expected[word] = count + 1;
+            }
 
-            foreach (var value in values)
+            foreach (var value in ValidValues.ValidDataFileContent)
             {
                 wordCounter.AddWord(value);
             }
