@@ -2,7 +2,7 @@
 {
     internal static class ValidValues
     {
-        public readonly static string[] ValidDataFileContent = new string[]
+        public static readonly string[] ValidDataFileContent = new string[]
         {
             "One",
             "One",
