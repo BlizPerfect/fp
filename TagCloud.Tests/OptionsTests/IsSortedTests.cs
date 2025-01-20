@@ -4,6 +4,7 @@ using FluentAssertions;
 
 namespace TagCloud.Tests.OptionsTests
 {
+    [TestFixture]
     internal class IsSortedTests() : BaseOptionTest("IsSorted")
     {
         [TestCase("")]

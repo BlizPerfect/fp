@@ -5,6 +5,7 @@ using TagCloud.Tests.Utilities;
 
 namespace TagCloud.Tests.OptionsTests
 {
+    [TestFixture]
     internal class WordsToIncludeFileNameTests() : BaseOptionTest("WordsToIncludeFileName")
     {
         [TestCase("NonExistingFile.txt")]
