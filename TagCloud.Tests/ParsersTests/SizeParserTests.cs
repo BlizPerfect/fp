@@ -75,5 +75,18 @@ namespace TagCloud.Tests.ParsersTests
             var actual = SizeParser.ParseSizeDimension(size);
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [Test]
+        public void ParseImageSize_ReturnsCorrectSize()
+        {
+            var width = 125;
+            var height = 55;
+            var size = $"{width}:{height}";
+            var expectedSize = new Size(width, height);
+
+            var result = SizeParser.ParseImageSize(size);
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Should().Be(expectedSize);
+        }
     }
 }

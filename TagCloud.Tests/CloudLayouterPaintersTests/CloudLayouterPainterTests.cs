@@ -39,5 +39,25 @@ namespace TagCloud.Tests.CloudLayouterPaintersTests
             var actual = painter.Draw(tags);
             actual.Should().BeEquivalentTo(expected);
         }
+
+        [Test]
+        public void Draw_ReturnsBitmapWithCorrectSize()
+        {
+            var size = new Size(1000, 1000);
+            var tags = new List<Tag>
+            {
+                new Tag(
+                    "Test",
+                    new Rectangle(
+                        new Point(size.Width / 2, size.Height / 2),
+                        new Size(size.Width / 10, size.Height / 10)))
+            };
+
+            var painter = new CloudLayouterPainter(size);
+            var result = painter.Draw(tags);
+
+            result.IsSuccess.Should().BeTrue();
+            result.Value.Size.Should().Be(size);
+        }
     }
 }
