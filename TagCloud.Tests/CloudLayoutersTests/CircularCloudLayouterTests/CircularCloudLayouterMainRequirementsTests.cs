@@ -10,7 +10,10 @@ using TagCloud.Tests.Extensions;
 namespace TagCloud.Tests.CloudLayoutersTests.CircularCloudLayouterTests
 {
     [TestFixture]
-    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage(
+        "Interoperability",
+        "CA1416:Проверка совместимости платформы",
+        Justification = "Код предназначен для выполнения только на Windows 6.1 и новее")]
     internal class CircularCloudLayouterMainRequirementsTests
     {
         private Point center = new Point();

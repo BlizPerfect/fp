@@ -8,7 +8,10 @@ using TagCloud.Tests.Utilities;
 namespace TagCloud.Tests.ImageSaversTests
 {
     [TestFixture]
-    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage(
+        "Interoperability",
+        "CA1416:Проверка совместимости платформы",
+        Justification = "Код предназначен для выполнения только на Windows 6.1 и новее")]
     internal class ImageSaverTests
     {
         private readonly string directoryPath = "TempFilesForImageSaverTests";

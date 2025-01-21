@@ -8,7 +8,10 @@ namespace TagCloud.ImageSavers
     // Реализован пункт на перспективу:
     // Формат результата.
     // Поддерживать разные форматы изображений.
-    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage(
+        "Interoperability",
+        "CA1416:Проверка совместимости платформы",
+        Justification = "Код предназначен для выполнения только на Windows 6.1 и новее")]
     internal class ImageSaver : IImageSaver
     {
         private readonly Dictionary<string, ImageFormat> supportedFormats =

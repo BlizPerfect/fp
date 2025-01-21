@@ -4,7 +4,10 @@ using System.Drawing;
 
 namespace TagCloud.Parsers
 {
-    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage(
+        "Interoperability",
+        "CA1416:Проверка совместимости платформы",
+        Justification = "Код предназначен для выполнения только на Windows 6.1 и новее")]
     internal static class FontParser
     {
         public static Result<FontFamily> ParseFont(string font)

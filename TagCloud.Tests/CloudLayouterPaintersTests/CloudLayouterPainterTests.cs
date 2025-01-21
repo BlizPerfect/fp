@@ -7,7 +7,10 @@ using TagCloud.CloudLayouterPainters;
 namespace TagCloud.Tests.CloudLayouterPaintersTests
 {
     [TestFixture]
-    [SuppressMessage("Interoperability", "CA1416:Проверка совместимости платформы", Justification = "<Ожидание>")]
+    [SuppressMessage(
+        "Interoperability",
+        "CA1416:Проверка совместимости платформы",
+        Justification = "Код предназначен для выполнения только на Windows 6.1 и новее")]
     internal class CloudLayouterPainterTests
     {
         private static readonly TestCaseData[] invalidTestCases = new TestCaseData[]
