@@ -33,7 +33,7 @@ namespace TagCloud.Parsers
                 return Result.Fail<Size>(height.Error);
             }
 
-            return new Size(width.Value, height.Value).AsResult();
+            return new Size(width.GetValueOrThrow(), height.GetValueOrThrow()).AsResult();
         }
 
         public static Result<int> ParseSizeDimension(string dimension)

@@ -32,7 +32,7 @@ namespace TagCloud.Factories
                     return Result.Fail<IWordFilter>(wordsResult.Error);
                 }
 
-                foreach (var word in wordsResult.Value)
+                foreach (var word in wordsResult.GetValueOrThrow())
                 {
                     wordFilter.Add(word.ToLower());
                 }
@@ -54,7 +54,7 @@ namespace TagCloud.Factories
                     return Result.Fail<IWordFilter>(wordsResult.Error);
                 }
 
-                foreach (var word in wordsResult.Value)
+                foreach (var word in wordsResult.GetValueOrThrow())
                 {
                     wordFilter.Remove(word.ToLower());
                 }

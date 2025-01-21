@@ -66,7 +66,7 @@ namespace TagCloud
                             return Result.Fail<List<Tag>>(tagResult.Error);
                         }
 
-                        tags.Add(tagResult.Value);
+                        tags.Add(tagResult.GetValueOrThrow());
                     }
                     return Result.Ok(tags);
                 })

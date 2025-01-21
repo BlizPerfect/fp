@@ -76,7 +76,7 @@ namespace TagCloud.Tests.NormalizersTests
             }
             var expected = dict.AsResult();
             var actual = normalizer.Normalize(values, defaultMinCoefficient, decimalPlaces);
-            actual.Value.Should().BeEquivalentTo(expected.Value);
+            actual.GetValueOrThrow().Should().BeEquivalentTo(expected.GetValueOrThrow());
         }
     }
 }

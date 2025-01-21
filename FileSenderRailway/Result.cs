@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("TagCloud")]
-[assembly: InternalsVisibleTo("TagCloud.Tests")]
 namespace FileSenderRailway;
 
 public class None

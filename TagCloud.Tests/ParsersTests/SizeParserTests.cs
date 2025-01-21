@@ -86,7 +86,7 @@ namespace TagCloud.Tests.ParsersTests
 
             var result = SizeParser.ParseImageSize(size);
             result.IsSuccess.Should().BeTrue();
-            result.Value.Should().Be(expectedSize);
+            result.GetValueOrThrow().Should().Be(expectedSize);
         }
     }
 }

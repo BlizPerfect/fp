@@ -57,7 +57,7 @@ namespace TagCloud.Tests.CloudLayouterPaintersTests
             var result = painter.Draw(tags);
 
             result.IsSuccess.Should().BeTrue();
-            result.Value.Size.Should().Be(size);
+            result.GetValueOrThrow().Size.Should().Be(size);
         }
     }
 }
